@@ -8,7 +8,12 @@ class CriteriaSelection extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:8080/api/criterialist")
+    let apiURLPrefix = process.env.REACT_APP_API_URL_PREFIX;
+    console.log(process.env.NODE_ENV);
+    console.log(apiURLPrefix);
+    let apiURL = apiURLPrefix + "/api/criterialist";
+    console.log(apiURL);
+    fetch(apiURL)
       .then((response) => {
         return response.json();
       })
