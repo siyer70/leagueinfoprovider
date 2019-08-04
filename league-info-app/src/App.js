@@ -18,8 +18,10 @@ class App extends React.Component {
     var countryName = splitCriteria[0].replace(" ", "%20");
     var leagueName = splitCriteria[1].replace(" ", "%20");
     var teamName = splitCriteria[2].replace(" ", "%20");
-    var positionUrl = "http://localhost:8080/api/position/query?country_name={0}&league_name={1}&team_name={2}";
+    var baseUrl = process.env.REACT_APP_API_URL_PREFIX;
+    var positionUrl = baseUrl + "/api/position/query?country_name={0}&league_name={1}&team_name={2}";
     positionUrl = positionUrl.replace("{0}", countryName).replace("{1}", leagueName).replace("{2}", teamName);
+    console.log(positionUrl);
     this.loadResult(positionUrl);
   }
 
