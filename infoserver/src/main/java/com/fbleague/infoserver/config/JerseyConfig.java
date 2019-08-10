@@ -1,6 +1,11 @@
 package com.fbleague.infoserver.config;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+
+import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.fbleague.infoserver.CorsFilter;
@@ -17,5 +22,11 @@ public class JerseyConfig extends ResourceConfig {
         register(CriteriaResource.class);
         register(PositionResource.class);
     }
+    
+	@Bean
+	public Client client() {
+		return ClientBuilder.newClient(new ClientConfig());
+	}
+    
 
 }

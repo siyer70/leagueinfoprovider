@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,6 +20,7 @@ import javax.ws.rs.core.UriBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.fbleague.infoserver.config.ConfigManager;
@@ -34,7 +34,9 @@ import com.fbleague.infoserver.model.Criteria;
 import com.fbleague.infoserver.model.Position;
 
 
+
 @Component
+@Profile("!test")
 public class CacheManagerImpl implements CacheManager {
 
 	static Logger logger = LoggerFactory.getLogger(CacheManagerImpl.class);
