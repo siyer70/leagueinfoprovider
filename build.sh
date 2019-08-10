@@ -3,7 +3,7 @@ echo "Building API Server.."
 currdir=`pwd`
 mkdir -p release
 cd infoserver/
-$M2_HOME/bin/mvn clean install
+mvn clean install
 ret=$?
 cd ..
 if [ $ret -eq 0 ]; then
