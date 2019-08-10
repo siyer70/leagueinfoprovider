@@ -13,6 +13,7 @@ if [ $ret -eq 0 ]; then
 	echo "API server build succeeded."
 	echo "Building UI Component.."
 	cd league-info-app/
+	echo "npm version is:"
 	npm -v
 	npm install
 	npm run build
