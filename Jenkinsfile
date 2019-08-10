@@ -5,16 +5,15 @@ pipeline {
         jdk 'JDK8'
     }
     stages {
-      stage('Build API Server') { 
+      stage('Build') { 
         steps {
           withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
             sh "./build.sh"
-            sh "npm -v"
           }
         }
         post {
            success {
-                echo 'API Server build succeeded, Now Archiving...'
+                echo 'Build stage succeeded, now Archiving...'
                }
         } 
       }
