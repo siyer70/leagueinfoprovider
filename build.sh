@@ -13,6 +13,7 @@ if [ $ret -eq 0 ]; then
 	echo "Building UI Component.."
 	cd league-info-app/
 	echo "Building UI Component.."
+	npm install
 	npm run build
 	ret=$?
 	cd ..
