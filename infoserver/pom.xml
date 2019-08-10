@@ -16,6 +16,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<it.skip>true</it.skip>
 	</properties>
 
 	<dependencies>
@@ -64,6 +65,14 @@
 		    <version>3.12.2</version>
 		    <scope>test</scope>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-core</artifactId>
+		    <version>2.25.0</version>
+		    <scope>test</scope>
+		</dependency>
 						
 	</dependencies>
 
@@ -72,8 +81,56 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+				    	<id>pre-integration-test</id>
+						<configuration>
+						  <skip>${it.skip}</skip>
+						</configuration>
+						<goals>
+							<goal>start</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-integration-test</id>
+						<configuration>
+						  <skip>${it.skip}</skip>
+						</configuration>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
+	
+	<profiles>
+	    <profile>
+			<id>integration</id>
+			<build>
+				<plugins>
+					<plugin>
+				    	<groupId>org.apache.maven.plugins</groupId>
+				    	<artifactId>maven-failsafe-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+						    	<configuration>
+		                            <includes>
+		                                <include>**/*IT</include>
+		                            </includes>
+						        	<skip>${it.skip}</skip>
+						      	</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

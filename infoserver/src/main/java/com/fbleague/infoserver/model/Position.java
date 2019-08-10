@@ -11,6 +11,16 @@ public class Position {
 	private String team_id;
 	private String team_name;
 	private String overall_league_position;
+	
+	public Position() {};
+	
+	public Position(String country_name, String league_name, String team_name, String overall_league_position) {
+		this.country_name = country_name;
+		this.league_name = league_name;
+		this.team_name = team_name;
+		this.overall_league_position = overall_league_position;
+	}
+	
 	public String getCountry_id() {
 		return country_id;
 	}

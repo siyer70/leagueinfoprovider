@@ -9,6 +9,16 @@ public class League {
 	private String league_id;
 	private String league_name;
 	
+	public League() {}
+	
+	public League(String country_id, String country_name, String league_id, String league_name) {
+		super();
+		this.country_id = country_id;
+		this.country_name = country_name;
+		this.league_id = league_id;
+		this.league_name = league_name;
+	}
+
 	public String getCountry_id() {
 		return country_id;
 	}
