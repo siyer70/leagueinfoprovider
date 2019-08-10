@@ -1,6 +1,7 @@
 #!/bin/bash
 echo "Building API Server.."
 currdir=`pwd`
+rm -r release
 mkdir -p release
 cd infoserver/
 mvn clean install
