@@ -7,7 +7,10 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-              sh mvn -version
+              def mvn_version = 'Maven 3.6.1'
+              withEnv( ["PATH+MAVEN=${tool mvn_version}/bin"] ) {              
+                sh mvn -version
+              }
             }
             post {
                success {
