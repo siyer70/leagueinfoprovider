@@ -8,7 +8,6 @@ pipeline {
         stage('Build') { 
             steps {
               sh mvn -version
-               sh './build.sh' 
             }
             post {
                success {
