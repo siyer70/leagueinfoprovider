@@ -8,7 +8,7 @@ pipeline {
         stage('Build') { 
             steps {
               withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin"]) {              
-                sh "mvn -version"
+                sh "./build.sh"
               }
             }
             post {
