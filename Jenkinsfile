@@ -10,7 +10,7 @@ pipeline {
         description: 'Where do you want to deploy?');
     }
     environment {
-      DEPLOY_ENV = ${params.deployTo}
+      DEPLOY_ENV = "${params.deployTo}"
       MY_APP_VERSION = readMavenPom(file: 'infoserver/pom.xml').getVersion()
     }
     stages {
