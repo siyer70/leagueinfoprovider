@@ -1,6 +1,7 @@
 #!/bin/bash
-MY_APP_VERSION=$1
-RELEASE_VERSION_FOLDER="infoserver-$MY_APP_VERSION"
+DEPLOY_ENV=$1
+MY_APP_VERSION=$2
+RELEASE_VERSION_FOLDER="$DEPLOY_ENV/infoserver-$MY_APP_VERSION"
 echo "Building API Server.."
 currdir=`pwd`
 rm -r release
