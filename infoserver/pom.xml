@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.fbleague</groupId>
 	<artifactId>infoserver</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>infoserver</name>
 	<description>Football League Information Server</description>
 
