@@ -13,7 +13,6 @@ cd ..
 if [ $ret -eq 0 ]; then
 	echo "Version: $MY_APP_VERSION"
 	cp infoserver/target/*.jar release/$RELEASE_VERSION_FOLDER
-	tar -czvf release.tar.gz release/$RELEASE_VERSION_FOLDER
 	echo "API server build succeeded."
 	echo "Building UI Component.."
 	cd league-info-app/
@@ -25,6 +24,7 @@ if [ $ret -eq 0 ]; then
 	cd ..
 	if [ $ret -eq 0 ]; then
 		cp -R league-info-app/build release/$RELEASE_VERSION_FOLDER
+		tar -czvf release.tar.gz release/$RELEASE_VERSION_FOLDER
 		echo "UI Component built successfully."
 	else
 		echo "UI Component build failed, terminating.."
