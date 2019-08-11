@@ -8,6 +8,7 @@ mvn clean install
 ret=$?
 cd ..
 if [ $ret -eq 0 ]; then
+	echo "Version: $POM_ARTIFACTID-$POM_VERSION"
 	cp infoserver/target/*.jar release/
 	tar -czvf release.tar.gz release/
 	echo "API server build succeeded."
