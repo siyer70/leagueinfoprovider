@@ -1,4 +1,5 @@
 #!/bin/bash
+MY_APP_VERSION=$1
 echo "Building API Server.."
 currdir=`pwd`
 rm -r release
@@ -8,7 +9,7 @@ mvn clean install
 ret=$?
 cd ..
 if [ $ret -eq 0 ]; then
-	echo "Version: $POM_ARTIFACTID-$POM_VERSION"
+	echo "Version: $MY_APP_VERSION"
 	cp infoserver/target/*.jar release/
 	tar -czvf release.tar.gz release/
 	echo "API server build succeeded."

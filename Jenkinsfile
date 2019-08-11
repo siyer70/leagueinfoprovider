@@ -12,7 +12,7 @@ pipeline {
         steps {
           echo "POM Version is: Infoserver - $MY_APP_VERSION"
           withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
-            sh "./build.sh"
+            sh "./build.sh $MY_APP_VERSION" 
           }
         }
         post {
