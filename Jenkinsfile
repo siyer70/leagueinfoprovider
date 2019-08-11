@@ -5,7 +5,7 @@ pipeline {
         jdk 'JDK8'
     }
     environment {
-      MY_APP_VERSION = readMavenPom(file: 'inforserver/pom.xml').getVersion()
+      MY_APP_VERSION = readMavenPom(file: 'infoserver/pom.xml').getVersion()
     }
     stages {
       stage('Build') { 
