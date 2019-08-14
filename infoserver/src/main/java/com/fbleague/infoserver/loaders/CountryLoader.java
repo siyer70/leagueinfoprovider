@@ -11,18 +11,19 @@ import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import com.fbleague.infoserver.model.Country;
 
-public class CountryLoader extends AbstractLoader {
+@Component
+@Profile("!test")
+public class CountryLoader implements Loader {
 	Logger logger = LoggerFactory.getLogger(CountryLoader.class);
 
-	public CountryLoader(Map<String, Map<String, ? extends Object>> cache, WebTarget target) {
-		super(cache, target);
-	}
 
 	@Override
-	public boolean load() {
+	public void load(Map<String, Map<String, ? extends Object>> cache, WebTarget target) {
 		logger.info("Loading countries");
 		Map<String, Country> countryMap = new HashMap<String, Country>();
 		cache.put(COUNTRIES_KEY, countryMap);
@@ -37,10 +38,8 @@ public class CountryLoader extends AbstractLoader {
 				countryMap.put(country.getCountry_name(), country);
 			});
 			logger.info("Loaded countries");
-			return true;
 		} catch (ProcessingException ex) {
 			logger.error("An error occurred while loading countries", ex);
-			return false;
 		}
 	}
 

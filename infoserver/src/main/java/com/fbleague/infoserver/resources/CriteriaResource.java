@@ -13,7 +13,7 @@ import com.fbleague.infoserver.CacheManager;
 
 @Path("/criterialist")
 public class CriteriaResource {
-	Logger logger = LoggerFactory.getLogger(CountryResource.class);
+	Logger logger = LoggerFactory.getLogger(CriteriaResource.class);
 
 	@Autowired
 	CacheManager cacheManager;

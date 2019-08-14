@@ -11,28 +11,28 @@ import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import com.fbleague.infoserver.model.Country;
 import com.fbleague.infoserver.model.League;
 
-public class LeagueLoader extends AbstractLoader {
+@Component
+@Profile("!test")
+public class LeagueLoader implements Loader {
 	Logger logger = LoggerFactory.getLogger(LeagueLoader.class);
 
-	public LeagueLoader(Map<String, Map<String, ? extends Object>> cache, WebTarget target) {
-		super(cache, target);
-	}
-
 	@Override
-	public boolean load() {
+	public void load(Map<String, Map<String, ? extends Object>> cache, WebTarget target) {
 		logger.info("Loading Leagues");
 		Map<String, League> leagueMap = new HashMap<String, League>();
 		cache.put(LEAGUES_KEY, leagueMap);
 
-		try {
-			Map<String, Country> countryMap = (Map<String, Country>) cache.get(COUNTRIES_KEY);
-			
-			countryMap.values().forEach(country -> {
-				logger.info("Sending request to information source..");
+		Map<String, Country> countryMap = (Map<String, Country>) cache.get(COUNTRIES_KEY);
+
+		countryMap.values().forEach(country -> {
+			logger.info("Sending request to information source for country: {}", country.getCountry_name());
+			try {
 		        final List<League> leagues = target.queryParam("action", "get_leagues")
 		        		.queryParam("country_id", country.getCountry_id())
 		        		.request()
@@ -42,15 +42,12 @@ public class LeagueLoader extends AbstractLoader {
 				leagues.forEach(league -> {
 					leagueMap.put(league.getLeague_id(), league);
 				});
-				
-			});
+				logger.info("Loaded leagues for country: {}", country.getCountry_name());
+			} catch (ProcessingException ex) {
+				logger.error("An error occurred while loading leagues", ex);
+			}
+		});
 
-			logger.info("Loaded leagues");
-			return true;
-		} catch (ProcessingException ex) {
-			logger.error("An error occurred while loading leagues", ex);
-			return false;
-		}
 	}
 
 }

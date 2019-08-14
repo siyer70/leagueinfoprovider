@@ -29,11 +29,8 @@ import com.fbleague.infoserver.loaders.LeagueLoader;
 import com.fbleague.infoserver.loaders.Loader;
 import com.fbleague.infoserver.loaders.PositionLoader;
 import com.fbleague.infoserver.loaders.TeamLoader;
-import com.fbleague.infoserver.model.Country;
 import com.fbleague.infoserver.model.Criteria;
 import com.fbleague.infoserver.model.Position;
-
-
 
 @Component
 @Profile("!test")
@@ -42,24 +39,40 @@ public class CacheManagerImpl implements CacheManager {
 	static Logger logger = LoggerFactory.getLogger(CacheManagerImpl.class);
 	
 	private final Client client;
+
+	private final ConfigManager configManager;
+
+	private final CountryLoader countryLoader;
+
+	private final LeagueLoader leagueLoader;
+
+	private final TeamLoader teamLoader;
+
+	private final PositionLoader positionLoader;
+	
 	private final Map<String, Map<String, ? extends Object>> cache; 
 	private WebTarget target=null;
 	private Timer timer = null;
 	private final AtomicInteger readers;
 	private final AtomicBoolean isWriting;
-	
-	@Autowired
-	private ConfigManager configManager;
 
-	public CacheManagerImpl(Client client) {
+	@Autowired
+	public CacheManagerImpl(Client client, ConfigManager configManager,
+			CountryLoader countryLoader, LeagueLoader leagueLoader,
+			TeamLoader teamLoader, PositionLoader positionLoader) {
 		this.client = client;
+		this.configManager = configManager;
+		this.countryLoader = countryLoader;
+		this.leagueLoader = leagueLoader;
+		this.teamLoader = teamLoader;
+		this.positionLoader = positionLoader;
 		this.cache = new ConcurrentHashMap<String, Map<String,? extends Object>>();
 		readers = new AtomicInteger();
 		isWriting = new AtomicBoolean();
  	}
 	
 	@PostConstruct
-	public void init() {
+	private void init() {
 		logger.info("Post Construct is called for loader");
 		this.target = client.target(getBaseURI()).queryParam("APIkey", configManager.getProperty("apikey"));
 		loadOrReloadCache(); // load it initially
@@ -75,10 +88,6 @@ public class CacheManagerImpl implements CacheManager {
 		timer.schedule(task, 1000 * delay, 1000 * period);
 	}
 
-	public List<Country> getCountries() {
-		return new ArrayList(cache.get(Loader.COUNTRIES_KEY).values());
-	}
-	
 	public List<Criteria> getSearchCombinations() {
 		waitForCacheUpdate();
 		List<Criteria> criteriaList = new ArrayList<Criteria>();
@@ -137,20 +146,20 @@ public class CacheManagerImpl implements CacheManager {
 		}
 	}
 
-	private boolean loadCountries() {
-		return new CountryLoader(cache, target).load();
+	private void loadCountries() {
+		countryLoader.load(cache, target);
 	}
 	
-	private boolean loadLeagues() {
-		return new LeagueLoader(cache, target).load();
+	private void loadLeagues() {
+		leagueLoader.load(cache, target);
 	}
 	
-	private boolean loadTeams() {
-		return new TeamLoader(cache, target).load();
+	private void loadTeams() {
+		teamLoader.load(cache, target);
 	}
 
-	private boolean loadPositions() {
-		return new PositionLoader(cache, target).load();
+	private void loadPositions() {
+		positionLoader.load(cache, target);
 	}
 
     private URI getBaseURI() {
