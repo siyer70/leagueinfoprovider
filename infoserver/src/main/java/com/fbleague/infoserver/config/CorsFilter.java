@@ -1,4 +1,4 @@
-package com.fbleague.infoserver;
+package com.fbleague.infoserver.config;
 
 import java.io.IOException;
 

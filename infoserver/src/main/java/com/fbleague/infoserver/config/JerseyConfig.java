@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.fbleague.infoserver.CacheManagerImpl;
-import com.fbleague.infoserver.CorsFilter;
 import com.fbleague.infoserver.resources.CriteriaResource;
 import com.fbleague.infoserver.resources.PositionResource;
 
