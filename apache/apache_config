@@ -1,0 +1,35 @@
+#Configuration for setting apache as reverse proxy
+
+#install
+sudo apt-get install apache2 -y
+
+
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+
+cat /etc/apache2/sites-available/000-default.conf 
+<VirtualHost *:8080>
+        ServerName 172.31.23.191
+    	ProxyPreserveHost On
+
+	ProxyPass           /api/   http://localhost:8500/api/
+    	ProxyPassReverse    /api/   http://localhost:8500/api/
+        ProxyPass               /       http://localhost:8400/
+        ProxyPassReverse        /       http://localhost:8400/
+
+	LogLevel debug
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+
+
+#stop, start, reload and restart
+sudo systemctl stop apache2
+sudo systemctl start apache2
+
+sudo systemctl reload apache2
+sudo systemctl restart apache2
+
+
