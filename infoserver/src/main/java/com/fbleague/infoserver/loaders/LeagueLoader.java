@@ -37,7 +37,7 @@ public class LeagueLoader implements Loader {
 		        		.queryParam("country_id", country.getCountry_id())
 		        		.request()
 		                .accept(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<List<League>>() {});
-				logger.info("Request succeeded -> {} leagues loaded for country {}", leagues.size(), country.getCountry_name());
+				logger.info("Request succeeded -> leagues loaded for country {} : {}", country.getCountry_name(), leagues.size());
 
 				leagues.forEach(league -> {
 					leagueMap.put(league.getLeague_id(), league);

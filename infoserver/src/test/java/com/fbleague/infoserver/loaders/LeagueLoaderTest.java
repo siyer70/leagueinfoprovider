@@ -1,7 +1,6 @@
 package com.fbleague.infoserver.loaders;
 
 import static com.fbleague.infoserver.loaders.Loader.COUNTRIES_KEY;
-import static com.fbleague.infoserver.loaders.Loader.LEAGUES_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -24,11 +23,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.fbleague.infoserver.model.Country;
 import com.fbleague.infoserver.model.League;
-import com.fbleague.infoserver.model.Position;
 import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PositionLoaderTest {
+public class LeagueLoaderTest {
 
 	Map<String, Map<String, ? extends Object>> cache = new HashMap<>();
 	
@@ -45,26 +43,22 @@ public class PositionLoaderTest {
 	public void setup() {
 		Map<String, Country> countryMap = new HashMap<>();
 		countryMap.put("IN", new Country("IN", "India"));
-		
-		Map<String, League> leagueMap = new HashMap<>();
-		leagueMap.put("LID", new League("IN", "India", "LID", "Ligue 2"));
-		
 		cache.put(COUNTRIES_KEY, countryMap);
-		cache.put(LEAGUES_KEY, leagueMap);
-		List<Position> positions = Lists.<Position>newArrayList(new Position("India", "Ligue 2", "Some team", "1"));
+
+		List<League> Leagues = Lists.<League>newArrayList(new League("IN", "India", "lid", "Ligue 2"));
 		when(target.queryParam(any(), any()))
 			.thenReturn(target);
 		when(target.request()).thenReturn(builder);
 		when(builder.accept(MediaType.APPLICATION_JSON)).thenReturn(builder);
 		when(builder.get()).thenReturn(response);
-		when(response.readEntity(new GenericType<List<Position>>() {})).thenReturn(positions);
+		when(response.readEntity(new GenericType<List<League>>() {})).thenReturn(Leagues);
 	}
 	
 	@Test
-	public void shouldBeAbleToLoadPositionsInCache() {
-		PositionLoader classUnderTest = new PositionLoader();
+	public void shouldBeAbleToLoadLeaguesInCache() {
+		LeagueLoader classUnderTest = new LeagueLoader();
 		classUnderTest.load(cache, target);
-		assertThat(cache.get(Loader.POSITIONS_KEY).size()).isEqualTo(1);
+		assertThat(cache.get(Loader.LEAGUES_KEY).size()).isEqualTo(1);
 	}
 
 }

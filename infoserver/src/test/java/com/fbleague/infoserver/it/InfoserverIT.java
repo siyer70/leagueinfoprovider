@@ -1,7 +1,11 @@
 package com.fbleague.infoserver.it;
 
 
-import static io.restassured.RestAssured.when;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.http.HttpStatus;
 import org.junit.Before;
@@ -17,12 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.fbleague.infoserver.model.Criteria;
 import com.fbleague.infoserver.model.Position;
 
-import static io.restassured.RestAssured.*;
 import io.restassured.response.Response;
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.Arrays;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

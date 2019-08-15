@@ -7,6 +7,11 @@ public class Team {
 	private String team_key;
 	private String team_name;
 	private String team_badge;
+	public Team(String team_key, String team_name, String team_badge) {
+		this.team_key = team_key;
+		this.team_name = team_name;
+		this.team_badge = team_badge;
+	}
 	public String getTeam_key() {
 		return team_key;
 	}

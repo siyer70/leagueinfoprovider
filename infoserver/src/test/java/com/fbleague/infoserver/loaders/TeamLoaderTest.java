@@ -24,11 +24,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.fbleague.infoserver.model.Country;
 import com.fbleague.infoserver.model.League;
-import com.fbleague.infoserver.model.Position;
+import com.fbleague.infoserver.model.Team;
 import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PositionLoaderTest {
+public class TeamLoaderTest {
 
 	Map<String, Map<String, ? extends Object>> cache = new HashMap<>();
 	
@@ -51,20 +51,20 @@ public class PositionLoaderTest {
 		
 		cache.put(COUNTRIES_KEY, countryMap);
 		cache.put(LEAGUES_KEY, leagueMap);
-		List<Position> positions = Lists.<Position>newArrayList(new Position("India", "Ligue 2", "Some team", "1"));
+		List<Team> teams = Lists.<Team>newArrayList(new Team("A1", "India", "sun.gif"));
 		when(target.queryParam(any(), any()))
 			.thenReturn(target);
 		when(target.request()).thenReturn(builder);
 		when(builder.accept(MediaType.APPLICATION_JSON)).thenReturn(builder);
 		when(builder.get()).thenReturn(response);
-		when(response.readEntity(new GenericType<List<Position>>() {})).thenReturn(positions);
+		when(response.readEntity(new GenericType<List<Team>>() {})).thenReturn(teams);
 	}
 	
 	@Test
-	public void shouldBeAbleToLoadPositionsInCache() {
-		PositionLoader classUnderTest = new PositionLoader();
+	public void shouldBeAbleToLoadTeamsInCache() {
+		TeamLoader classUnderTest = new TeamLoader();
 		classUnderTest.load(cache, target);
-		assertThat(cache.get(Loader.POSITIONS_KEY).size()).isEqualTo(1);
+		assertThat(cache.get(Loader.TEAMS_KEY).size()).isEqualTo(1);
 	}
 
 }

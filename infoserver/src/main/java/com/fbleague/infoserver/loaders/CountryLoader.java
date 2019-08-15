@@ -32,7 +32,7 @@ public class CountryLoader implements Loader {
 			logger.info("Sending request to information source..");
 			final List<Country> countries = target.queryParam("action", "get_countries").request()
 			        .accept(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<List<Country>>() {});
-			logger.info("Request succeeded -> {} countries loaded", countries.size());
+			logger.info("Request succeeded -> countries loaded : {}", countries.size());
 
 			countries.forEach(country -> {
 				countryMap.put(country.getCountry_name(), country);

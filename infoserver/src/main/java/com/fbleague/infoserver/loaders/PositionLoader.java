@@ -40,7 +40,7 @@ public class PositionLoader implements Loader {
 						.queryParam("league_id", league.getLeague_id())
 						.request()
 				        .accept(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<List<Position>>() {});
-				logger.info("Request succeeded -> {} positions loaded for league {}", positions.size(), league.getLeague_name());
+				logger.info("Request succeeded -> positions loaded for league {} : {}", league.getLeague_name(), positions.size());
 
 				positions.forEach(position -> {
 					String key = position.getCountry_name() + "|" + 
