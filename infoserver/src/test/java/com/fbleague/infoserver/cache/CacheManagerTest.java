@@ -1,4 +1,4 @@
-package com.fbleague.infoserver;
+package com.fbleague.infoserver.cache;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -17,6 +17,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
+import com.fbleague.infoserver.cache.CacheManagerImpl;
 import com.fbleague.infoserver.config.ConfigManager;
 import com.fbleague.infoserver.loaders.CountryLoader;
 import com.fbleague.infoserver.loaders.LeagueLoader;

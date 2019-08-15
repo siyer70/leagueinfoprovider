@@ -1,4 +1,4 @@
-package com.fbleague.infoserver;
+package com.fbleague.infoserver.cache;
 
 import java.net.URI;
 import java.util.ArrayList;

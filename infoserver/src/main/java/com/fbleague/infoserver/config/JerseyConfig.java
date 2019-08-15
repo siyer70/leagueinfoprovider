@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import com.fbleague.infoserver.CacheManagerImpl;
+import com.fbleague.infoserver.cache.CacheManagerImpl;
 import com.fbleague.infoserver.resources.CriteriaResource;
 import com.fbleague.infoserver.resources.PositionResource;
 
