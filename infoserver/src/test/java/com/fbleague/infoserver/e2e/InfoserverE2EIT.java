@@ -28,7 +28,7 @@ import com.fbleague.infoserver.it.InfoserverIT;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class InfoserverE2ETest {
+public class InfoserverE2EIT {
 	static Logger logger = LoggerFactory.getLogger(InfoserverIT.class);
 	
 	@Value("${selenium.settings.browserName}")
