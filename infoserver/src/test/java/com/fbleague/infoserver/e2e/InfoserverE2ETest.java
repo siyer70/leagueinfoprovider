@@ -42,8 +42,6 @@ public class InfoserverE2ETest {
 	
 	@Test
 	public void browseLeagueApp() throws MalformedURLException, InterruptedException {
-		final String TEXT_FOR_TITLE = "Football team positions in League";
-		
 	    // Create an instance of the driver
 		URL local = new URL(chromeDriverURL);
 		WebDriver driver = new RemoteWebDriver(local, DesiredCapabilities.chrome());		
@@ -55,7 +53,6 @@ public class InfoserverE2ETest {
 	    
 	    // Anticipate web browser response, with an explicit wait
 	    WebDriverWait wait = new WebDriverWait(driver, 15);
-	    wait.until(ExpectedConditions.titleIs(TEXT_FOR_TITLE));
 	    
 	    WebElement element = driver.findElement(By.name("clist"));
 	    wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.name("clist"), 0));
