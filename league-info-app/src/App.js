@@ -1,12 +1,21 @@
 import React from 'react';
 import './index.css';
 import './App.css';
+import PageHeader from './Header';
+import PageFooter from './Footer';
 import CriteriaSelection from './CriteriaSelection';
 import Result from './Result';
+import { Rolling } from 'react-loading-io';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {positionData: {countryInfo:'', leagueInfo:'', teamInfo:'', position:0}};
+    this.state = {
+      loading: false,
+      positionData: {countryInfo:'', leagueInfo:'', teamInfo:'', position:0}};
+  }
+
+  setCriteriaLoadingStatus(isLoading) {
+    this.setState({loading:isLoading});
   }
 
   updateResultPostChange(selection) {
@@ -26,6 +35,7 @@ class App extends React.Component {
   }
 
   loadResult = function(positionUrl) {
+    this.setState({loading: true});
     fetch(positionUrl)
       .then((response) => {
         return response.json();
@@ -35,39 +45,28 @@ class App extends React.Component {
         let linfo = "(".concat(data.league_id, ")", " - ", data.league_name);
         let tinfo = "(".concat(data.team_id, ")", " - ", data.team_name);
         let pos = data.overall_league_position;
-        this.setState({ positionData: {countryInfo:cinfo, leagueInfo:linfo, teamInfo:tinfo, position:pos} });
+        this.setState({ loading: false, positionData: {countryInfo:cinfo, leagueInfo:linfo, teamInfo:tinfo, position:pos} });
       }).catch(error => {
         console.log(error);
       });
   }
 
   render() {
+    let element;
+    if(this.state.loading) {
+      element = <div align="center"><Rolling size={64} color="crimson"/></div>
+    } else {
+      element = <br/>
+    }
     return (
       <div className="App">
-        <header>
-          <div>
-            <div class="headerrow" align="center">
-              <span>Know your favorite football team position in league</span>
-            </div>
-            <img class="imgclass" src="football_splash.jpeg" alt="Splash Image" width="100%"/>
-          </div>
-        </header>
-        <CriteriaSelection postChangeTrigger={this.updateResultPostChange.bind(this)} {...this.props}/>
-        <br/>
-        <br/>
-        <br/>
+        <PageHeader />
+        <CriteriaSelection setCriteriaLoadingStatus={this.setCriteriaLoadingStatus.bind(this)} 
+              postChangeTrigger={this.updateResultPostChange.bind(this)} 
+              {...this.props}/>
+        {element}
         <Result positionData={this.state.positionData}/>
-        <footer>
-          <div class="footer">
-              <div class="footerrow" align="right">
-                <span>&copy; 2019 Some company Inc. All Rights Reserved &nbsp;</span>
-                <span class="tab">|</span>
-                <span class="tab">Sitemap</span>
-                <span class="tab">|</span>
-                <span class="tab">Privacy Policy</span>
-              </div>
-          </div>
-        </footer>        
+        <PageFooter />
       </div>
     );
   }

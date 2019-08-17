@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+
 class CriteriaSelection extends React.Component {
   constructor(props) {
     super(props);
@@ -13,6 +13,7 @@ class CriteriaSelection extends React.Component {
     console.log(apiURLPrefix);
     let apiURL = apiURLPrefix + "/api/criterialist";
     console.log(apiURL);
+    this.props.setCriteriaLoadingStatus(true);
     fetch(apiURL)
       .then((response) => {
         return response.json();
@@ -24,6 +25,7 @@ class CriteriaSelection extends React.Component {
           return {value: vstr, display: dstr} 
         })
         this.setState({ criteriaList: [{value: '', display: '(Select criteria from the list)'}].concat(criteraListFromAPI) });
+        this.props.setCriteriaLoadingStatus(false);
       }).catch(error => {
         console.log(error);
       });
@@ -38,7 +40,7 @@ class CriteriaSelection extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <div className="App">
+        <div className="Criteria">
           <label>Select Country, League and Team:</label>
           <span>&nbsp;</span>
           <select name="clist" value={this.state.selectedCriteria} onChange={this.handleChange}>
