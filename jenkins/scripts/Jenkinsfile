@@ -5,12 +5,17 @@ pipeline {
         jdk 'JDK8'
     }
     parameters {
-      choice(name: 'deployTo',
-        choices: 'DEV\nQA\nUAT\nPROD',
-        description: 'Where do you want to deploy?');
+      booleanParam(name: 'runIntegration',
+        defaultValue: false,
+        description: 'Run Integration Test'
+        )
+      booleanParam(name: 'runSelenium',
+        defaultValue: false,
+        description: 'Run Selenium Test'
+        )
     }
     environment {
-      DEPLOY_ENV = "${params.deployTo}"
+      GENERATE_ARTIFACT_FOR_ENV = "PROD"
       MY_APP_VERSION = readMavenPom(file: 'infoserver/pom.xml').getVersion()
     }
     stages {
@@ -19,7 +24,7 @@ pipeline {
           echo "POM Version is: Infoserver - $MY_APP_VERSION"
           echo "Jenkins job name: ${JOB_NAME} - build number is: ${BUILD_NUMBER}"
           withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
-            sh "jenkins/scripts/build.sh $DEPLOY_ENV $MY_APP_VERSION" 
+            sh "jenkins/scripts/build.sh $GENERATE_ARTIFACT_FOR_ENV $MY_APP_VERSION" 
           }
         }
         post {
@@ -37,6 +42,46 @@ pipeline {
            success {
                 echo 'Archiving completed.'
             }
+        }
+      }
+      stage('Parallel Stage') {
+        parallel {
+          stage('Integration Test') { 
+            when {
+                expression { 
+                    return params.runIntegration ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/
+                }
+            }        
+            steps {
+              echo 'Running Integration Test'
+              withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
+                 mvn verify -Pintegration -Dit.skip=false
+              }
+            }
+            post {
+               success {
+                    echo 'Integration test completed.'
+                }
+            }
+          }
+          stage('Selenium Test') { 
+            when {
+                expression { 
+                    return params.runSelenium ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/
+                }
+            }        
+            steps {
+              echo 'Running Selenium Test'
+              withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
+                 mvn verify -Pselenium -Dit.skip=true
+              }
+            }
+            post {
+               success {
+                    echo 'Selenium test completed.'
+                }
+            }
+          }
         }
       }
     } 
