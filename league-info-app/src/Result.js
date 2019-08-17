@@ -9,7 +9,7 @@ class Result extends React.Component {
 
   render() {
     return (
-      <table border="1" align="center">
+      <table align="center">
         <tbody>
           <tr>
             <td>Country ID & Name: </td>

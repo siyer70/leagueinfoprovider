@@ -44,11 +44,30 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
+        <header>
+          <div>
+            <div class="headerrow" align="center">
+              <span>Know your favorite football team position in league</span>
+            </div>
+            <img class="imgclass" src="football_splash.jpeg" alt="Splash Image" width="100%"/>
+          </div>
+        </header>
         <CriteriaSelection postChangeTrigger={this.updateResultPostChange.bind(this)} {...this.props}/>
         <br/>
         <br/>
         <br/>
         <Result positionData={this.state.positionData}/>
+        <footer>
+          <div class="footer">
+              <div class="footerrow" align="right">
+                <span>&copy; 2019 Some company Inc. All Rights Reserved &nbsp;</span>
+                <span class="tab">|</span>
+                <span class="tab">Sitemap</span>
+                <span class="tab">|</span>
+                <span class="tab">Privacy Policy</span>
+              </div>
+          </div>
+        </footer>        
       </div>
     );
   }
