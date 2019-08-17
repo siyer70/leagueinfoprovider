@@ -44,44 +44,40 @@ pipeline {
             }
         }
       }
-      stage('Parallel Stage') {
-        parallel {
-          stage('Integration Test') { 
-            when {
-                expression { 
-                    return params.runIntegration ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/
-                }
-            }        
-            steps {
-              echo 'Running Integration Test'
-              withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
-                 sh "mvn -f infoserver/pom.xml verify -Pintegration -Dit.skip=false"
-              }
+      stage('Integration Test') { 
+        when {
+            expression { 
+                return params.runIntegration ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/
             }
-            post {
-               success {
-                    echo 'Integration test completed.'
-                }
-            }
+        }        
+        steps {
+          echo 'Running Integration Test'
+          withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
+             sh "mvn -f infoserver/pom.xml verify -Pintegration -Dit.skip=false"
           }
-          stage('Selenium Test') { 
-            when {
-                expression { 
-                    return params.runSelenium ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/
-                }
-            }        
-            steps {
-              echo 'Running Selenium Test'
-              withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
-                 sh "mvn -f infoserver/pom.xml verify -Pselenium -Dit.skip=true"
-              }
+        }
+        post {
+           success {
+                echo 'Integration test completed.'
             }
-            post {
-               success {
-                    echo 'Selenium test completed.'
-                }
+        }
+      }
+      stage('Selenium Test') { 
+        when {
+            expression { 
+                return params.runSelenium ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/
             }
+        }        
+        steps {
+          echo 'Running Selenium Test'
+          withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
+             sh "mvn -f infoserver/pom.xml verify -Pselenium -Dit.skip=true"
           }
+        }
+        post {
+           success {
+                echo 'Selenium test completed.'
+            }
         }
       }
     } 
