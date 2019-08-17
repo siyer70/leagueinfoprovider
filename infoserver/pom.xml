@@ -135,7 +135,34 @@
 		                            <includes>
 		                                <include>**/*IT</include>
 		                            </includes>
+		                            <excludes>
+		                            	<exclude>**/*E2EIT</exclude>
+		                            </excludes>
 						        	<skip>${it.skip}</skip>
+						      	</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	    <profile>
+			<id>selenium</id>
+			<build>
+				<plugins>
+					<plugin>
+				    	<groupId>org.apache.maven.plugins</groupId>
+				    	<artifactId>maven-failsafe-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+						    	<configuration>
+		                            <includes>
+		                                <include>**/*E2EIT</include>
+		                            </includes>
 						      	</configuration>
 							</execution>
 						</executions>
