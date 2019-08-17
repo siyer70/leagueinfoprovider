@@ -55,7 +55,7 @@ pipeline {
             steps {
               echo 'Running Integration Test'
               withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
-                 sh "mvn verify -Pintegration -Dit.skip=false"
+                 sh "mvn -f infoserver/pom.xml verify -Pintegration -Dit.skip=false"
               }
             }
             post {
@@ -73,7 +73,7 @@ pipeline {
             steps {
               echo 'Running Selenium Test'
               withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
-                 sh "mvn verify -Pselenium -Dit.skip=true"
+                 sh "mvn -f infoserver/pom.xml verify -Pselenium -Dit.skip=true"
               }
             }
             post {
