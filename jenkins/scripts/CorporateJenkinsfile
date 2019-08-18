@@ -70,8 +70,10 @@ pipeline {
         }        
         steps {
           echo 'Running Selenium Test'
-          withEnv(["JAVA_HOME=${ tool 'java 8' }", "PATH+MAVEN=${tool 'M3'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
-             sh "mvn -f infoserver/pom.xml verify -Pselenium -Dit.skip=true"
+          withEnv(['JENKINS_NODE_COOKIE=dontkill',"JAVA_HOME=${ tool 'java 8' }", "PATH+MAVEN=${tool 'M3'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
+            sh 'jenkins/scripts/start-selenium-server.sh ubuntu'
+            sh "mvn -f infoserver/pom.xml verify -Pselenium -Dit.skip=true"
+            sh 'jenkins/scripts/stop-selenium-server.sh'
           }
         }
         post {
