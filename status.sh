@@ -5,15 +5,13 @@ if [ -z "$API_SERVER_PID" ]
 then
       echo "API Server not running"
 else
-        kill -9 $API_SERVER_PID
-        echo "API Server is stopped"
+        echo "API Server running with PID: $API_SERVER_PID"
 fi
-WEB_SERVER_PID=`ps -ef | grep -v -e 'grep ' | grep -i "serve" | grep -i "build"| tr -s " " | cut -d " " -f 2`
+WEB_SERVER_PID=`ps -ef | grep -v -e 'grep ' | grep -i "serve" | grep -i "8400"| tr -s " " | cut -d " " -f 2`
 if [ -z "$WEB_SERVER_PID" ]
 then
       echo "Web Server not running"
 else
-        kill -9 $WEB_SERVER_PID
-        echo "Web Server is stopped"
+        echo "Web Server running with PID: $WEB_SERVER_PID"
 fi
 
