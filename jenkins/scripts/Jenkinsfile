@@ -70,8 +70,9 @@ pipeline {
         }        
         steps {
           echo 'Running Selenium Test'
-          withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
-             sh "mvn -f infoserver/pom.xml verify -Pselenium -Dit.skip=true"
+          withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven 3.6.1'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {
+            sh 'java -jar ~/selenium-server/selenium-server-standalone-2.48.2.jar -browser "browserName=chrome, version=76.0, platform=MAC" -Dwebdriver.chrome.driver=~/selenium-server/MAC/chromedriver'
+            sh "mvn -f infoserver/pom.xml verify -Pselenium -Dit.skip=true"
           }
         }
         post {

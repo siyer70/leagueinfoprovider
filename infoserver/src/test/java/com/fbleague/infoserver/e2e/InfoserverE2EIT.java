@@ -38,13 +38,20 @@ public class InfoserverE2EIT {
 	String chromeDriverURL;	
 
 	@Value("${selenium.settings.leagueAppURL}")
-	String leagueAppURL;	
+	String leagueAppURL;
+	
+	@Value("${selenium.settings.seleniumServerURL}")
+	String seleniumServerURL;	
 	
 	@Test
 	public void browseLeagueApp() throws MalformedURLException, InterruptedException {
 	    // Create an instance of the driver
-		URL local = new URL(chromeDriverURL);
-		WebDriver driver = new RemoteWebDriver(local, DesiredCapabilities.chrome());		
+//		URL local = new URL(chromeDriverURL);
+		
+		// use Selenium Server (Selenium Grid)
+		URL executorURL = new URL(seleniumServerURL);
+		
+		WebDriver driver = new RemoteWebDriver(executorURL, DesiredCapabilities.chrome());		
 		
 	    // Navigate to a web page
 	    driver.get(leagueAppURL);
