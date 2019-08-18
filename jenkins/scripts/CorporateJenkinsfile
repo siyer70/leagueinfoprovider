@@ -1,0 +1,84 @@
+pipeline {
+    agent any
+    tools {
+        maven 'M3'
+        jdk 'java 8'
+    }
+    parameters {
+      booleanParam(name: 'runIntegration',
+        defaultValue: false,
+        description: 'Run Integration Test'
+        )
+      booleanParam(name: 'runSelenium',
+        defaultValue: false,
+        description: 'Run Selenium Test'
+        )
+    }
+    environment {
+      GENERATE_ARTIFACT_FOR_ENV = "PROD"
+      MY_APP_VERSION = readMavenPom(file: 'infoserver/pom.xml').getVersion()
+    }
+    stages {
+      stage('Build') { 
+        steps {
+          echo "POM Version is: Infoserver - $MY_APP_VERSION"
+          echo "Jenkins job name: ${JOB_NAME} - build number is: ${BUILD_NUMBER}"
+          withEnv(["JAVA_HOME=${ tool 'java 8' }", "PATH+MAVEN=${tool 'M3'}/bin:${env.JAVA_HOME}/bin:/home/bitnami/.nvm/versions/node/v10.16.1/bin:/usr/local/bin"]) {              
+            sh "jenkins/scripts/build.sh $GENERATE_ARTIFACT_FOR_ENV $MY_APP_VERSION" 
+          }
+        }
+        post {
+           success {
+                echo 'Build stage succeeded, now Archiving...'
+               }
+        } 
+      }
+      stage('Archive') { 
+        steps {
+          echo 'Archiving Release artifacts'
+          archiveArtifacts artifacts: 'release.tar.gz'
+        }
+        post {
+           success {
+                echo 'Archiving completed.'
+            }
+        }
+      }
+      stage('Integration Test') { 
+        when {
+            expression { 
+                return params.runIntegration ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/
+            }
+        }        
+        steps {
+          echo 'Running Integration Test'
+          withEnv(["JAVA_HOME=${ tool 'java 8' }", "PATH+MAVEN=${tool 'M3'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
+             sh "mvn -f infoserver/pom.xml verify -Pintegration -Dit.skip=false"
+          }
+        }
+        post {
+           success {
+                echo 'Integration test completed.'
+            }
+        }
+      }
+      stage('Selenium Test') { 
+        when {
+            expression { 
+                return params.runSelenium ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/
+            }
+        }        
+        steps {
+          echo 'Running Selenium Test'
+          withEnv(["JAVA_HOME=${ tool 'java 8' }", "PATH+MAVEN=${tool 'M3'}/bin:${env.JAVA_HOME}/bin:/usr/local/bin"]) {              
+             sh "mvn -f infoserver/pom.xml verify -Pselenium -Dit.skip=true"
+          }
+        }
+        post {
+           success {
+                echo 'Selenium test completed.'
+            }
+        }
+      }
+    } 
+}
