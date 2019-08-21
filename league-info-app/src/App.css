@@ -3,17 +3,17 @@
 }
 
 .imgclass {
-  margin-bottom:30px;
+  margin-bottom: 30px;
   border: 1px solid;
   border-color: lightgrey;
 }
 
 .headerrow {
-  margin-top:30px;
+  margin-top: 30px;
   background-color: black;
   color: white;
   padding-top: 10px;
-  padding-bottom:10px;
+  padding-bottom: 10px;
   font-weight: bold;
 }
 
@@ -26,16 +26,14 @@
   background-color: lightgray;
   color: black;
   padding-top: 5px;
-  padding-bottom:5px;
+  padding-bottom: 5px;
 }
 
 .Criteria {
-  margin-bottom:30px;
+  margin-bottom: 30px;
 }
 
 .tab {
   padding-left: 2px;
-  padding-right: 2px; 
+  padding-right: 2px;
 }
-
-

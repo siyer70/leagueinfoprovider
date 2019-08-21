@@ -1,16 +1,16 @@
 import React from 'react';
 
-const PageFooter = (props) => {
-    return (
-        <footer>
-          <div class="footer">
-              <div class="footerrow">
-                <span>&copy;2019 XYZ Inc. All Rights Reserved</span>
-                <span class="tab">| Privacy Policy</span>
-              </div>
-          </div>
-        </footer>        
-    );
-}
+const PageFooter = () => {
+  return (
+    <footer>
+      <div className="footer">
+        <div className="footerrow">
+          <span>&copy;2019 XYZ Inc. All Rights Reserved</span>
+          <span className="tab">| Privacy Policy</span>
+        </div>
+      </div>
+    </footer>
+  );
+};
 
 export default PageFooter;
