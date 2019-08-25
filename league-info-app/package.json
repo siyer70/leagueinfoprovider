@@ -38,7 +38,25 @@
       "git add"
     ]
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 10,
+        "functions": 10,
+        "lines": 10,
+        "statements": 10
+      }
+    },
+    "coverageReporters": [
+      "text"
+    ]
+  },
   "devDependencies": {
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.1.0",
@@ -46,7 +64,9 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
+    "fetch-reply-with": "^1.2.9",
     "husky": "^3.0.4",
+    "jest-fetch-mock": "^2.1.2",
     "lint-staged": "^9.2.3",
     "prettier": "^1.18.2",
     "pretty-quick": "^1.11.1"

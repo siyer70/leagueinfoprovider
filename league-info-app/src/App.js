@@ -102,7 +102,6 @@ class App extends React.Component {
         <CriteriaSelection
           setCriteriaLoadingStatus={this.setCriteriaLoadingStatus}
           postChangeTrigger={this.updateResultPostChange}
-          {...this.props}
         />
         {element}
         <Result positionData={positionData} />

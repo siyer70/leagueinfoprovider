@@ -3,7 +3,7 @@ import React from 'react';
 class CriteriaSelection extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { selectedCriteria: 'audi', criteriaList: [] };
+    this.state = { selectedCriteria: '', criteriaList: [] };
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -54,7 +54,7 @@ class CriteriaSelection extends React.Component {
   render() {
     const { criteriaList, selectedCriteria } = this.state;
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form>
         <div className="Criteria">
           <label htmlFor="clist-id">
             Select Country, League and Team:&nbsp;
