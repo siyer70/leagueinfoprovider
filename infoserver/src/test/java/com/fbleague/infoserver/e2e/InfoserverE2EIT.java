@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.function.Function;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +15,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -46,7 +49,7 @@ public class InfoserverE2EIT {
 	@Test
 	public void browseLeagueApp() throws MalformedURLException, InterruptedException {
 	    // Create an instance of the driver
-//		URL local = new URL(chromeDriverURL);
+//		URL executorURL = new URL(chromeDriverURL);
 		
 		// use Selenium Server (Selenium Grid)
 		URL executorURL = new URL(seleniumServerURL);
@@ -84,9 +87,6 @@ public class InfoserverE2EIT {
 	    
 	    // Conclude a test
 	    driver.quit();
-	    
-		Integer someValue = 1;
-		assertThat(someValue).isEqualTo(1);		
 	}
 
 }

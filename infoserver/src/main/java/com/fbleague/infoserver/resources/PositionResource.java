@@ -6,6 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
@@ -15,7 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fbleague.infoserver.cache.CacheManager;
 import com.fbleague.infoserver.model.Position;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @Path("/position")
+@Produces(MediaType.APPLICATION_JSON)
+@Api(value = "Position Resource for handling position queries", produces = "application/json")
 public class PositionResource {
 	Logger logger = LoggerFactory.getLogger(PositionResource.class);
 
@@ -24,7 +32,14 @@ public class PositionResource {
     
     @GET
     @Path("/query")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(            //Swagger Annotation
+            value = "Returns the standing of the team in the league",
+            response = Response.class)
+    @ApiResponses(value = {       //Swagger Annotation
+            @ApiResponse(code = 200, message = "Results successfully retrieved for the given query"),
+            @ApiResponse(code = 404, message = "No such Country or team or league")
+    })
     public Response getPosition(
     		@QueryParam("country_name") String countryName,
     		@QueryParam("league_name") String leagueName,
