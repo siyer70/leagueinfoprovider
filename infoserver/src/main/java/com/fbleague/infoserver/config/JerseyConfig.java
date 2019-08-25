@@ -39,6 +39,9 @@ public class JerseyConfig extends ResourceConfig {
     @Value("${spring.jersey.application-path:/}")
     private String apiPath;
 	
+    @Value("${server.servlet.contextPath}")
+    private String contextRoot;
+	
 	@Value("${appURL}")
 	private String appURL;
 	
@@ -66,7 +69,7 @@ public class JerseyConfig extends ResourceConfig {
         swaggerConfig.setVersion("v1");
         swaggerConfig.setContact("Shekhar");
         swaggerConfig.setSchemes(new String[] { "http", "https" });
-        swaggerConfig.setBasePath(this.apiPath);
+        swaggerConfig.setBasePath(this.contextRoot + "/" + this.apiPath);
         swaggerConfig.setResourcePackage("com.fbleague.infoserver.resources");
         swaggerConfig.setPrettyPrint(true);
         swaggerConfig.setScan(true);

@@ -9,7 +9,8 @@ class CriteriaSelection extends React.Component {
 
   componentDidMount() {
     const apiURLPrefix = process.env.REACT_APP_API_URL_PREFIX;
-    const apiURL = `${apiURLPrefix}/api/criterialist`;
+    const criteriaURL = process.env.REACT_APP_API_CRITERIA_URL;
+    const apiURL = `${apiURLPrefix}${criteriaURL}`;
     const { setCriteriaLoadingStatus } = this.props;
     setCriteriaLoadingStatus(true);
     fetch(apiURL)

@@ -12,8 +12,8 @@ cat /etc/apache2/sites-available/000-default.conf
         ServerName 172.31.23.191
     	ProxyPreserveHost On
 
-	ProxyPass           /api/   http://localhost:8500/api/
-    	ProxyPassReverse    /api/   http://localhost:8500/api/
+	ProxyPass           /v1/   http://localhost:8500/v1/
+    	ProxyPassReverse    /v1/   http://localhost:8500/v1/
         ProxyPass               /       http://localhost:8400/
         ProxyPassReverse        /       http://localhost:8400/
 

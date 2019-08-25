@@ -76,7 +76,8 @@ class App extends React.Component {
     const leagueName = splitCriteria[1].replace(' ', '%20');
     const teamName = splitCriteria[2].replace(' ', '%20');
     const baseUrl = process.env.REACT_APP_API_URL_PREFIX;
-    let positionUrl = `${baseUrl}/api/position/query?country_name={0}&league_name={1}&team_name={2}`;
+    const positionURL = process.env.REACT_APP_API_POSITION_URL;
+    let positionUrl = `${baseUrl}${positionURL}`;
     positionUrl = positionUrl
       .replace('{0}', countryName)
       .replace('{1}', leagueName)
