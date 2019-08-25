@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount, shallow, render } from 'enzyme';
+import { shallow } from 'enzyme';
 import 'fetch-reply-with';
 import CriteriaSelection from './CriteriaSelection';
 import requestResponseData from './reqresponsedata';
@@ -39,15 +39,7 @@ describe('Criteria Selection Tests', () => {
     process.nextTick(() => {
       expect(setCriteriaLoadingStatus).toHaveBeenCalledTimes(2);
       expect(component.state('criteriaList').length).toEqual(3);
-      //   component.update();
-      //   expect(component.find('#clist-id').length).toEqual(3);
       done();
     });
-
-    // component
-    //   .find('#clist-id')
-    //   .simulate('keydown', { key: 'ArrowDown', keyCode: 40, which: 40 });
-    // component.find('#clist-id').simulate('change', requestResponseData.event);
-    // expect(postChangeTrigger).toHaveBeenCalled();
   });
 });
