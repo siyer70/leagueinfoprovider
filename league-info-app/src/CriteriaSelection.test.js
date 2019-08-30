@@ -8,7 +8,7 @@ describe('Criteria Selection Tests', () => {
   let component;
 
   beforeEach(() => {
-    fetch('http://localhost:8080/api/criterialist', {
+    fetch('http://localhost:8080/v1/api/criterialist', {
       method: 'GET',
       replyWith: {
         status: 200,

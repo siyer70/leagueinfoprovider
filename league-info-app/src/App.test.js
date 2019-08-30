@@ -9,7 +9,7 @@ describe('Main App Test', () => {
   let component;
 
   beforeAll(() => {
-    fetch('http://localhost:8080/api/criterialist', {
+    fetch('http://localhost:8080/v1/api/criterialist', {
       method: 'GET',
       replyWith: {
         status: 200,
@@ -23,7 +23,7 @@ describe('Main App Test', () => {
     });
 
     fetch(
-      'http://localhost:8080/api/position/query?country_name=France&league_name=Ligue%202&team_name=AC%20Ajaccio',
+      'http://localhost:8080/v1/api/position/query?country_name=France&league_name=Ligue%202&team_name=AC%20Ajaccio',
       {
         method: 'GET',
         replyWith: {
