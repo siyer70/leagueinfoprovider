@@ -55,8 +55,10 @@ pipeline {
             }
         }        
         steps {
-          echo "Deploying to Production.."
-          sh "jenkins/scripts/deploy.sh" 
+          echo "Deploying to Production.."          
+          RELEASE_ARTIFACT="/Users/Shared/Jenkins/Home/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/archive/release.tar.gz"
+          echo "Main Release artifact is $RELEASE_ARTIFACT"          
+          sh "jenkins/scripts/deploy.sh $RELEASE_ARTIFACT" 
         }
         post {
            success {

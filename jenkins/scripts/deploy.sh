@@ -1,5 +1,6 @@
 #!/bin/bash
-REMOTE_HOST=${1:-"13.58.209.5"}
+RELEASE_ARTIFACT=${1:-"release.tar.gz"}
+REMOTE_HOST=${2:-"13.58.209.5"}
 
 ssh ubuntu@$REMOTE_HOST -i ~/jenkins.pem 'mkdir -p infoserver'
 ssh ubuntu@$REMOTE_HOST -i ~/jenkins.pem 'mkdir -p infoserver/bin'
