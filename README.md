@@ -2,7 +2,7 @@ A Service to query team standing in Football League
 
 Steps for local setup are provided below:
 
-Pre-requisites
+Prerequisite
 	
 	Install Java 8
 	Install node.js (v10.16.1) and npm (v6.9.0)
