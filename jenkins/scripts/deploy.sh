@@ -17,7 +17,7 @@ scp -v -o StrictHostKeyChecking=no  -i ~/jenkins.pem bin/backuplastrelease.sh ub
 
 ssh ubuntu@$REMOTE_HOST -i ~/jenkins.pem 'cd /home/ubuntu/infoserver && bin/backuplastrelease.sh'
 
-scp -v -o StrictHostKeyChecking=no  -i ~/jenkins.pem release.tar.gz ubuntu@$REMOTE_HOST:/home/ubuntu/infoserver/
+scp -v -o StrictHostKeyChecking=no  -i ~/jenkins.pem $RELEASE_ARTIFACT ubuntu@$REMOTE_HOST:/home/ubuntu/infoserver/
 ret=$?
 if [ $ret -ne 0 ]; then
 	echo "File transfer failed"
