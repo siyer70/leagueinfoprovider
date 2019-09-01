@@ -4,15 +4,15 @@ MY_APP_VERSION=$2
 RELEASE_VERSION_FOLDER="$GENERATE_ARTIFACT_FOR_ENV/infoserver-$MY_APP_VERSION"
 echo "Building API Server.."
 currdir=`pwd`
-rm -r release
-mkdir -p release/$RELEASE_VERSION_FOLDER
+rm -r releases
+mkdir -p releases/$RELEASE_VERSION_FOLDER
 cd infoserver/
 mvn clean install
 ret=$?
 cd ..
 if [ $ret -eq 0 ]; then
 	echo "Version: $MY_APP_VERSION"
-	cp infoserver/target/*.jar release/$RELEASE_VERSION_FOLDER
+	cp infoserver/target/*.jar releases/$RELEASE_VERSION_FOLDER
 	echo "API server build succeeded."
 	echo "Building UI Component.."
 	cd league-info-app/
@@ -23,8 +23,8 @@ if [ $ret -eq 0 ]; then
 	ret=$?
 	cd ..
 	if [ $ret -eq 0 ]; then
-		cp -R league-info-app/build release/$RELEASE_VERSION_FOLDER
-		tar -czvf release.tar.gz release/$RELEASE_VERSION_FOLDER
+		cp -R league-info-app/build releases/$RELEASE_VERSION_FOLDER
+		tar -czvf release.tar.gz releases/$RELEASE_VERSION_FOLDER
 		echo "UI Component built successfully."
 	else
 		echo "UI Component build failed, terminating.."
