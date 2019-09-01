@@ -21,6 +21,7 @@ pipeline {
     environment {
       GENERATE_ARTIFACT_FOR_ENV = "PROD"
       MY_APP_VERSION = readMavenPom(file: 'infoserver/pom.xml').getVersion()
+      MY_RELEASE_ARTIFACT="/Users/Shared/Jenkins/Home/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/archive/release.tar.gz"
     }
     stages {
       stage('Build') { 
@@ -56,9 +57,8 @@ pipeline {
         }        
         steps {
           echo "Deploying to Production.."          
-          RELEASE_ARTIFACT="/Users/Shared/Jenkins/Home/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/archive/release.tar.gz"
-          echo "Main Release artifact is $RELEASE_ARTIFACT"          
-          sh "jenkins/scripts/deploy.sh $RELEASE_ARTIFACT" 
+          echo "Main Release artifact is $MY_RELEASE_ARTIFACT"          
+          sh "jenkins/scripts/deploy.sh $MY_RELEASE_ARTIFACT" 
         }
         post {
            success {
