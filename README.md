@@ -1,3 +1,7 @@
+A Service to query team standing in Football League
+
+Steps for local setup are provided below:
+
 Pre-requisites
 	
 	Install Java 8
