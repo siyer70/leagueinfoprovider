@@ -49,6 +49,11 @@ pipeline {
         }
       }
       stage('Deploy') { 
+        when {
+            expression { 
+                return params.deployToProd ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/
+            }
+        }        
         steps {
           echo "Deploying to Production.."
           sh "jenkins/scripts/deploy.sh" 
