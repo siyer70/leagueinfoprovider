@@ -5,6 +5,10 @@ pipeline {
         jdk 'JDK8'
     }
     parameters {
+      booleanParam(name: 'deployToProd',
+        defaultValue: false,
+        description: 'Deploy to Production'
+        )
       booleanParam(name: 'runIntegration',
         defaultValue: false,
         description: 'Run Integration Test'
@@ -43,6 +47,17 @@ pipeline {
                 echo 'Archiving completed.'
             }
         }
+      }
+      stage('Deploy') { 
+        steps {
+          echo "Deploying to Production.."
+          sh "jenkins/scripts/deploy.sh" 
+        }
+        post {
+           success {
+                echo 'Deployment succeeded, you can access the new version now - Happy Browsing!'
+            }
+        } 
       }
       stage('Integration Test') { 
         when {
