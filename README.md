@@ -1,8 +1,10 @@
 Pre-requisites
+	
 	Install Java 8
 	Install node.js (v10.16.1) and npm (v6.9.0)
 	Install serve globally (npm install -g serve)
 	Install JMeter (Optional)
+	
 Setup Steps
 1.	Check out the code from github (git clone https://github.com/siyer70/leagueinfoserver)
 2.	Build the code with the command on the root directory of checked out folder: “jenkins/scripts/build.sh PROD 1.0”
