@@ -31,7 +31,9 @@ Setup Steps
 			Local: http://localhost:3000/ 
 			Prod:  http://13.58.209.5:8080 
 				
-		(In Prod, since 8080 is the only port opened, Apache as reverse proxy / gateway is configured in this port to manage the requests for both Web Server & API Server - see the architecture page for more details)
+		(In Prod, since 8080 is the only port opened, Apache as reverse proxy / gateway 
+		is configured in this port to manage the requests for both Web Server & API Server 
+		- see the architecture page for more details)
 		
 		And access the API service using the swagger url:
 				
