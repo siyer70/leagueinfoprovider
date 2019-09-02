@@ -22,16 +22,18 @@ Setup Steps
 	
 4.	Check the status of the service: bin/status.sh (MAC / Linux) - In Windows, status is visible in the spawned windows
 		
-		Status should be running
-		UI code runs in 3000 port of localhost (npm start default) – In Prod, port 8400 is used in EC2 host
-		Service runs in 8500 port of localhost – In Prod, same port is used in EC2 host
+		a. Status should be running
+		b. UI code runs in 3000 port of localhost (npm start default) – In Prod, port 8400 is used in EC2 host
+		c. Service runs in 8500 port of localhost – In Prod, same port is used in EC2 host
+		
 		So, you can access the app using url: 
 		
 			Local: http://localhost:3000/ 
 			Prod:  http://13.58.209.5:8080 
 				
-				In Prod, since 8080 is the only port opened, Apache as reverse proxy / gateway is configured in this port to manage the requests for both Web Server & API Server (see the architecture page for more details)
-				And access the API service using the swagger url:
+		(In Prod, since 8080 is the only port opened, Apache as reverse proxy / gateway is configured in this port to manage the requests for both Web Server & API Server - see the architecture page for more details)
+		
+		And access the API service using the swagger url:
 				
 				Local:  http://localhost:8500/v1/swagger-ui.html 
 				Prod: http://13.58.209.5:8080/v1/swagger-ui.html
