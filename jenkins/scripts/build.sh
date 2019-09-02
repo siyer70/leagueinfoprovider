@@ -4,7 +4,7 @@ MY_APP_VERSION=$2
 RELEASE_VERSION_FOLDER="$GENERATE_ARTIFACT_FOR_ENV/infoserver-$MY_APP_VERSION"
 echo "Building API Server.."
 currdir=`pwd`
-rm -r releases
+rm -r releases/$RELEASE_VERSION_FOLDER
 mkdir -p releases/$RELEASE_VERSION_FOLDER
 cd infoserver/
 mvn clean install
