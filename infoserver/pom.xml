@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.1.6.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.fbleague</groupId>
 	<artifactId>infoserver</artifactId>
@@ -26,106 +27,126 @@
 		</dependency>
 
 		<dependency>
-		   <groupId>org.springframework.boot</groupId>
-		   <artifactId>spring-boot-starter-web</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- swagger and spring fox dependencies -->
 		<dependency>
-		   <groupId>io.swagger</groupId>
-		   <artifactId>swagger-jersey2-jaxrs</artifactId>
-		   <version>1.5.13</version>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-jersey2-jaxrs</artifactId>
+			<version>1.5.13</version>
 		</dependency>
 		<dependency>
-		   <groupId>io.springfox</groupId>
-		   <artifactId>springfox-swagger2</artifactId>
-		   <version>2.7.0</version>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.7.0</version>
 		</dependency>
 		<dependency>
-		   <groupId>io.springfox</groupId>
-		   <artifactId>springfox-swagger-ui</artifactId>
-		   <version>2.7.0</version>
-		</dependency>		
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.7.0</version>
+		</dependency>
 
 		<dependency>
-		  <groupId>com.google.guava</groupId>
-		  <artifactId>guava</artifactId>
-		  <version>24.0-jre</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>24.0-jre</version>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
 		<dependency>
-		    <groupId>io.rest-assured</groupId>
-		    <artifactId>rest-assured</artifactId>
-		    <version>4.0.0</version>
-		    <scope>test</scope>
-		</dependency>
-		
-		<dependency>
-		      <groupId>io.rest-assured</groupId>
-		      <artifactId>json-path</artifactId>
-		      <version>4.0.0</version>
-		</dependency>
-		
-		<dependency>
-		      <groupId>io.rest-assured</groupId>
-		      <artifactId>xml-path</artifactId>
-		      <version>4.0.0</version>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>4.0.0</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-		      <groupId>io.rest-assured</groupId>
-		      <artifactId>json-schema-validator</artifactId>
-		      <version>4.0.0</version>
-		      <scope>test</scope>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-path</artifactId>
+			<version>4.0.0</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>xml-path</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-schema-validator</artifactId>
+			<version>4.0.0</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
 		<dependency>
-		    <groupId>org.assertj</groupId>
-		    <artifactId>assertj-core</artifactId>
-		    <version>3.12.2</version>
-		    <scope>test</scope>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.12.2</version>
+			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
 		<dependency>
-		    <groupId>org.mockito</groupId>
-		    <artifactId>mockito-core</artifactId>
-		    <version>2.25.0</version>
-		    <scope>test</scope>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>2.25.0</version>
+			<scope>test</scope>
 		</dependency>
-		
-	    <dependency>
-	        <groupId>org.seleniumhq.selenium</groupId>
-	        <artifactId>selenium-java</artifactId>
-	        <version>3.141.59</version>
-	    </dependency>  
-    
-	    <dependency>
-	        <groupId>org.seleniumhq.selenium</groupId>
-	        <artifactId>htmlunit-driver</artifactId>
-	        <version>2.33.2</version>
-	    </dependency>  	    	
-						
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>3.141.59</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>htmlunit-driver</artifactId>
+			<version>2.33.2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.0</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<executions>
 					<execution>
-				    	<id>pre-integration-test</id>
+						<id>pre-integration-test</id>
 						<configuration>
-						  <skip>${it.skip}</skip>
+							<skip>${it.skip}</skip>
 						</configuration>
 						<goals>
 							<goal>start</goal>
@@ -134,7 +155,7 @@
 					<execution>
 						<id>post-integration-test</id>
 						<configuration>
-						  <skip>${it.skip}</skip>
+							<skip>${it.skip}</skip>
 						</configuration>
 						<goals>
 							<goal>stop</goal>
@@ -144,54 +165,54 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
-	    <profile>
+		<profile>
 			<id>integration</id>
 			<build>
 				<plugins>
 					<plugin>
-				    	<groupId>org.apache.maven.plugins</groupId>
-				    	<artifactId>maven-failsafe-plugin</artifactId>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
 						<executions>
 							<execution>
 								<goals>
 									<goal>integration-test</goal>
 									<goal>verify</goal>
 								</goals>
-						    	<configuration>
-		                            <includes>
-		                                <include>**/*IT</include>
-		                            </includes>
-		                            <excludes>
-		                            	<exclude>**/*E2EIT</exclude>
-		                            </excludes>
-						        	<skip>${it.skip}</skip>
-						      	</configuration>
+								<configuration>
+									<includes>
+										<include>**/*IT</include>
+									</includes>
+									<excludes>
+										<exclude>**/*E2EIT</exclude>
+									</excludes>
+									<skip>${it.skip}</skip>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
 				</plugins>
 			</build>
 		</profile>
-	    <profile>
+		<profile>
 			<id>selenium</id>
 			<build>
 				<plugins>
 					<plugin>
-				    	<groupId>org.apache.maven.plugins</groupId>
-				    	<artifactId>maven-failsafe-plugin</artifactId>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
 						<executions>
 							<execution>
 								<goals>
 									<goal>integration-test</goal>
 									<goal>verify</goal>
 								</goals>
-						    	<configuration>
-		                            <includes>
-		                                <include>**/*E2EIT</include>
-		                            </includes>
-						      	</configuration>
+								<configuration>
+									<includes>
+										<include>**/*E2EIT</include>
+									</includes>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
