@@ -1,7 +1,8 @@
 package com.fbleague.infoserver.loaders;
 
-import static com.fbleague.infoserver.loaders.Loader.COUNTRIES_KEY;
-import static com.fbleague.infoserver.loaders.Loader.LEAGUES_KEY;
+import static com.fbleague.infoserver.loaders.LoaderConstants.COUNTRIES_KEY;
+import static com.fbleague.infoserver.loaders.LoaderConstants.LEAGUES_KEY;
+import static com.fbleague.infoserver.loaders.LoaderConstants.TEAMS_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -64,7 +65,7 @@ public class TeamLoaderTest {
 	public void shouldBeAbleToLoadTeamsInCache() {
 		TeamLoader classUnderTest = new TeamLoader();
 		classUnderTest.load(cache, target);
-		assertThat(cache.get(Loader.TEAMS_KEY).size()).isEqualTo(1);
+		assertThat(cache.get(TEAMS_KEY).size()).isEqualTo(1);
 	}
 
 }

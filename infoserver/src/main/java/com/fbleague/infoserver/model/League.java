@@ -1,58 +1,75 @@
 package com.fbleague.infoserver.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class League {
-	private String country_id;
-	private String country_name;
-	private String league_id;
-	private String league_name;
-	
-	public League() {}
-	
-	public League(String country_id, String country_name, String league_id, String league_name) {
-		super();
-		this.country_id = country_id;
-		this.country_name = country_name;
-		this.league_id = league_id;
-		this.league_name = league_name;
+
+	@JsonProperty("country_id")
+	private String countryId;
+
+	@JsonProperty("country_name")
+	private String countryName;
+
+	@JsonProperty("league_id")
+	private String leagueId;
+
+	@JsonProperty("league_name")
+	private String leagueName;
+
+	public League() {
 	}
 
-	public String getCountry_id() {
-		return country_id;
+	public League(String countryId, String countryName, String leagueId, String leagueName) {
+		super();
+		this.countryId = countryId;
+		this.countryName = countryName;
+		this.leagueId = leagueId;
+		this.leagueName = leagueName;
 	}
-	public void setCountry_id(String country_id) {
-		this.country_id = country_id;
+
+	public String getCountryId() {
+		return countryId;
 	}
-	public String getCountry_name() {
-		return country_name;
+
+	public void setCountryId(String countryId) {
+		this.countryId = countryId;
 	}
-	public void setCountry_name(String country_name) {
-		this.country_name = country_name;
+
+	public String getCountryName() {
+		return countryName;
 	}
-	public String getLeague_id() {
-		return league_id;
+
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
 	}
-	public void setLeague_id(String league_id) {
-		this.league_id = league_id;
+
+	public String getLeagueId() {
+		return leagueId;
 	}
-	public String getLeague_name() {
-		return league_name;
+
+	public void setLeagueId(String leagueId) {
+		this.leagueId = leagueId;
 	}
-	public void setLeague_name(String league_name) {
-		this.league_name = league_name;
+
+	public String getLeagueName() {
+		return leagueName;
 	}
+
+	public void setLeagueName(String leagueName) {
+		this.leagueName = leagueName;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((country_id == null) ? 0 : country_id.hashCode());
-		result = prime * result + ((country_name == null) ? 0 : country_name.hashCode());
-		result = prime * result + ((league_id == null) ? 0 : league_id.hashCode());
-		result = prime * result + ((league_name == null) ? 0 : league_name.hashCode());
+		result = prime * result + ((countryId == null) ? 0 : countryId.hashCode());
+		result = prime * result + ((leagueId == null) ? 0 : leagueId.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -62,33 +79,27 @@ public class League {
 		if (getClass() != obj.getClass())
 			return false;
 		League other = (League) obj;
-		if (country_id == null) {
-			if (other.country_id != null)
+		if (countryId == null) {
+			if (other.countryId != null) {
 				return false;
-		} else if (!country_id.equals(other.country_id))
+			}
+		} else if (!countryId.equals(other.countryId)) {
 			return false;
-		if (country_name == null) {
-			if (other.country_name != null)
+		}
+		if (leagueId == null) {
+			if (other.leagueId != null) {
 				return false;
-		} else if (!country_name.equals(other.country_name))
+			}
+		} else if (!leagueId.equals(other.leagueId)) {
 			return false;
-		if (league_id == null) {
-			if (other.league_id != null)
-				return false;
-		} else if (!league_id.equals(other.league_id))
-			return false;
-		if (league_name == null) {
-			if (other.league_name != null)
-				return false;
-		} else if (!league_name.equals(other.league_name))
-			return false;
+		}
 		return true;
 	}
+
 	@Override
 	public String toString() {
-		return "League [country_id=" + country_id + ", country_name=" + country_name + ", league_id=" + league_id
-				+ ", league_name=" + league_name + "]";
+		return "League [country_id=" + countryId + ", country_name=" + countryName + ", league_id=" + leagueId
+				+ ", league_name=" + leagueName + "]";
 	}
 
-	
 }

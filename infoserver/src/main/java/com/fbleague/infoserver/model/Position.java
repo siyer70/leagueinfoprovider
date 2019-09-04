@@ -1,75 +1,92 @@
 package com.fbleague.infoserver.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Position {
-	private String country_id;
-	private String country_name;
-	private String league_id;
-	private String league_name;
-	private String team_id;
-	private String team_name;
-	private String overall_league_position;
+
+	@JsonProperty("country_id")
+	private String countryId;
+
+	@JsonProperty("country_name")
+	private String countryName;
+
+	@JsonProperty("league_id")
+	private String leagueId;
+
+	@JsonProperty("league_name")
+	private String leagueName;
+
+	@JsonProperty("team_id")
+	private String teamId;
+
+	@JsonProperty("team_name")
+	private String teamName;
+
+	@JsonProperty("overall_league_position")
+	private String overallLeaguePosition;
 	
-	public Position() {};
 	
-	public Position(String country_name, String league_name, String team_name, String overall_league_position) {
-		this.country_name = country_name;
-		this.league_name = league_name;
-		this.team_name = team_name;
-		this.overall_league_position = overall_league_position;
+	public Position() {
+	}
+
+	public Position(String countryName, String leagueName, String teamName, String overallLeaguePosition) {
+		this.countryName = countryName;
+		this.leagueName = leagueName;
+		this.teamName = teamName;
+		this.overallLeaguePosition = overallLeaguePosition;
 	}
 	
-	public String getCountry_id() {
-		return country_id;
+	public String getCountryId() {
+		return countryId;
 	}
-	public void setCountry_id(String country_id) {
-		this.country_id = country_id;
+	public void setCountryId(String countryId) {
+		this.countryId = countryId;
 	}
-	public String getCountry_name() {
-		return country_name;
+	public String getCountryName() {
+		return countryName;
 	}
-	public void setCountry_name(String country_name) {
-		this.country_name = country_name;
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
 	}
-	public String getLeague_id() {
-		return league_id;
+	public String getLeagueId() {
+		return leagueId;
 	}
-	public void setLeague_id(String league_id) {
-		this.league_id = league_id;
+	public void setLeagueId(String leagueId) {
+		this.leagueId = leagueId;
 	}
-	public String getLeague_name() {
-		return league_name;
+	public String getLeagueName() {
+		return leagueName;
 	}
-	public void setLeague_name(String league_name) {
-		this.league_name = league_name;
+	public void setLeagueName(String leagueName) {
+		this.leagueName = leagueName;
 	}
-	public String getTeam_id() {
-		return team_id;
+	public String getTeamId() {
+		return teamId;
 	}
-	public void setTeam_id(String team_id) {
-		this.team_id = team_id;
+	public void setTeamId(String teamId) {
+		this.teamId = teamId;
 	}
-	public String getTeam_name() {
-		return team_name;
+	public String getTeamName() {
+		return teamName;
 	}
-	public void setTeam_name(String team_name) {
-		this.team_name = team_name;
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
 	}
-	public String getOverall_league_position() {
-		return overall_league_position;
+	public String getOverallLeaguePosition() {
+		return overallLeaguePosition;
 	}
-	public void setOverall_league_position(String overall_league_position) {
-		this.overall_league_position = overall_league_position;
+	public void setOverallLeaguePosition(String overallLeaguePosition) {
+		this.overallLeaguePosition = overallLeaguePosition;
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((country_name == null) ? 0 : country_name.hashCode());
-		result = prime * result + ((league_id == null) ? 0 : league_id.hashCode());
-		result = prime * result + ((team_id == null) ? 0 : team_id.hashCode());
+		result = prime * result + ((countryName == null) ? 0 : countryName.hashCode());
+		result = prime * result + ((leagueId == null) ? 0 : leagueId.hashCode());
+		result = prime * result + ((teamId == null) ? 0 : teamId.hashCode());
 		return result;
 	}
 	@Override
@@ -81,28 +98,34 @@ public class Position {
 		if (getClass() != obj.getClass())
 			return false;
 		Position other = (Position) obj;
-		if (country_name == null) {
-			if (other.country_name != null)
+		if (countryName == null) {
+			if (other.countryName != null) {
 				return false;
-		} else if (!country_name.equals(other.country_name))
+			}
+		} else if (!countryName.equals(other.countryName)) {
 			return false;
-		if (league_id == null) {
-			if (other.league_id != null)
+		}
+		if (leagueId == null) {
+			if (other.leagueId != null) {
 				return false;
-		} else if (!league_id.equals(other.league_id))
+			}
+		} else if (!leagueId.equals(other.leagueId)) {
 			return false;
-		if (team_id == null) {
-			if (other.team_id != null)
+		}
+		if (teamId == null) {
+			if (other.teamId != null) {
 				return false;
-		} else if (!team_id.equals(other.team_id))
+			}
+		} else if (!teamId.equals(other.teamId)) {
 			return false;
+		}
 		return true;
 	}
 	@Override
 	public String toString() {
-		return "Position [country_name=" + country_name + ", league_id=" + league_id + ", league_name=" + league_name
-				+ ", team_id=" + team_id + ", team_name=" + team_name + ", overall_league_position="
-				+ overall_league_position + "]";
+		return "Position [country_name=" + countryName + ", league_id=" + leagueId + ", league_name=" + leagueName
+				+ ", team_id=" + teamId + ", team_name=" + teamName + ", overall_league_position="
+				+ overallLeaguePosition + "]";
 	}
 	
 }

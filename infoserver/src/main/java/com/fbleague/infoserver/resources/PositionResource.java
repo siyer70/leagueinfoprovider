@@ -25,6 +25,8 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Api(value = "Position Resource for handling position queries", produces = "application/json")
 public class PositionResource {
+	private static final String UNKNOWN = "UnKnown";
+
 	Logger logger = LoggerFactory.getLogger(PositionResource.class);
 
 	@Autowired
@@ -45,15 +47,15 @@ public class PositionResource {
     		@QueryParam("league_name") String leagueName,
     		@QueryParam("team_name") String teamName
    		) {
-    	String key = new StringBuilder(Optional.ofNullable(countryName).orElse("UnKnown")).append("|")
-    			.append(Optional.ofNullable(leagueName).orElse("UnKnown")).append("|")
-    			.append(Optional.ofNullable(teamName).orElse("UnKnown")).toString();
+    	String key = new StringBuilder(Optional.ofNullable(countryName).orElse(UNKNOWN)).append("|")
+    			.append(Optional.ofNullable(leagueName).orElse(UNKNOWN)).append("|")
+    			.append(Optional.ofNullable(teamName).orElse(UNKNOWN)).toString();
     	logger.info("Received position query with following key: {}", key);
     	Optional<Position> position = Optional.ofNullable(cacheManager.getPosition(key));
     	Response response = position.isPresent()
     							? Response.status(Response.Status.OK).entity(position.get()).build()
     							: Response.status(Response.Status.NOT_FOUND).entity("Invalid country or league or team").build();
-    	logger.info("Response for the position query with key \"{}\" is {}", key, response.getEntity().toString());
+    	logger.info("Response for the position query with key \"{}\" is {}", key, response.getEntity());
         return response;
     }
 

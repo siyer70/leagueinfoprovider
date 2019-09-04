@@ -1,5 +1,8 @@
 package com.fbleague.infoserver.loaders;
 
+import static com.fbleague.infoserver.loaders.LoaderConstants.LEAGUES_KEY;
+import static com.fbleague.infoserver.loaders.LoaderConstants.TEAMS_KEY;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,18 +35,18 @@ public class TeamLoader implements Loader {
 		
 		try {
 			leagueMap.values().forEach(league -> {
-				logger.info("Sending request to information source for league: {}", league.getLeague_name());
+				logger.info("Sending request to information source for league: {}", league.getLeagueName());
 			    final List<Team> teams = target.queryParam("action", "get_teams")
-			    		.queryParam("league_id", league.getLeague_id())
+			    		.queryParam("league_id", league.getLeagueId())
 			    		.request()
 			            .accept(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<List<Team>>() {});
-				logger.info("Request succeeded -> teams loaded for league {} : {}", league.getLeague_name(), teams.size());
+				logger.info("Request succeeded -> teams loaded for league {} : {}", league.getLeagueName(), teams.size());
 
-				teams.forEach(team -> {
-					teamMap.put(team.getTeam_key(), team);
-				});
+				teams.forEach(team -> 
+					teamMap.put(team.getTeamKey(), team)
+				);
 				
-				logger.info("Loaded teams for league: {}", league.getLeague_name());
+				logger.info("Loaded teams for league: {}", league.getLeagueName());
 			});
 			
 		} catch (ProcessingException ex) {

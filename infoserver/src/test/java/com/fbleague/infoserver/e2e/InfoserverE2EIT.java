@@ -59,8 +59,6 @@ public class InfoserverE2EIT {
 	    // Navigate to a web page
 	    driver.get(leagueAppURL);
 	    
-	    Thread.sleep(100);
-	    
 	    // Anticipate web browser response, with an explicit wait
 	    WebDriverWait wait = new WebDriverWait(driver, 15);
 	    

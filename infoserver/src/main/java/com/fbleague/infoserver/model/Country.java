@@ -1,42 +1,51 @@
 package com.fbleague.infoserver.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Country {
-	private String country_id;
-	private String country_name;
+
+	@JsonProperty("country_id")
+	private String countryId;
+
+	@JsonProperty("country_name")
+	private String countryName;
 	
 	public Country() {}
-	public Country(String country_id, String country_name) {
-		this.country_id = country_id;
-		this.country_name = country_name;
+	
+	public Country(String countryId, String countryName) {
+		this.countryId = countryId;
+		this.countryName = countryName;
 	}
 	
-	public String getCountry_id() {
-		return country_id;
+	public String getCountryId() {
+		return countryId;
 	}
-	public void setCountry_id(String country_id) {
-		this.country_id = country_id;
+	public void setCountryId(String countryId) {
+		this.countryId = countryId;
 	}
-	public String getCountry_name() {
-		return country_name;
+	public String getCountryName() {
+		return countryName;
 	}
-	public void setCountry_name(String country_name) {
-		this.country_name = country_name;
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
 	}
+	
 	@Override
 	public String toString() {
-		return "Country [country_id=" + country_id + ", country_name=" + country_name + "]";
+		return "Country [country_id=" + countryId + ", country_name=" + countryName + "]";
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((country_id == null) ? 0 : country_id.hashCode());
-		result = prime * result + ((country_name == null) ? 0 : country_name.hashCode());
+		result = prime * result + ((countryId == null) ? 0 : countryId.hashCode());
+		result = prime * result + ((countryName == null) ? 0 : countryName.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -46,19 +55,21 @@ public class Country {
 		if (getClass() != obj.getClass())
 			return false;
 		Country other = (Country) obj;
-		if (country_id == null) {
-			if (other.country_id != null)
+		if (countryId == null) {
+			if (other.countryId != null) {
 				return false;
-		} else if (!country_id.equals(other.country_id))
+			}
+		} else if (!countryId.equals(other.countryId)) {
 			return false;
-		if (country_name == null) {
-			if (other.country_name != null)
+		}
+		if (countryName == null) {
+			if (other.countryName != null) {
 				return false;
-		} else if (!country_name.equals(other.country_name))
+			}
+		} else if (!countryName.equals(other.countryName)) {
 			return false;
+		}
 		return true;
 	}
-	
-	
 
 }

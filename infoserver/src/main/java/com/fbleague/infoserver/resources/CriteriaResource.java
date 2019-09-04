@@ -38,7 +38,7 @@ public class CriteriaResource {
     public Response getCriteriaList() {
     	logger.info("Received criteria query");
     	Response response = Response.status(Response.Status.OK).entity(cacheManager.getSearchCombinations()).build();
-    	logger.info("Response for the criteria query is {}", response.getEntity().toString());
+    	logger.info("Response for the criteria query is {}", response.getEntity());
     	return response;
     }
 }

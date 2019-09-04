@@ -25,6 +25,7 @@ import com.fbleague.infoserver.loaders.Loader;
 import com.fbleague.infoserver.loaders.PositionLoader;
 import com.fbleague.infoserver.loaders.TeamLoader;
 import com.fbleague.infoserver.model.Position;
+import static com.fbleague.infoserver.loaders.LoaderConstants.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -61,7 +62,7 @@ public class CacheManagerTest {
 			Map<String, Position> positionMap = new HashMap<String, Position>();
 			positionMap.put(samplePositionObjectKey, samplePositionObject);
 			Map<String, Map<String, ? extends Object>> cache = invocation.getArgument(0);
-			cache.put(Loader.POSITIONS_KEY, positionMap);
+			cache.put(POSITIONS_KEY, positionMap);
 			return null;
 		}
 

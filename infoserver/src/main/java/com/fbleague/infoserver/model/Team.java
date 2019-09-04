@@ -1,43 +1,54 @@
 package com.fbleague.infoserver.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Team {
-	private String team_key;
-	private String team_name;
-	private String team_badge;
-	public Team(String team_key, String team_name, String team_badge) {
-		this.team_key = team_key;
-		this.team_name = team_name;
-		this.team_badge = team_badge;
+
+	@JsonProperty("team_key")
+	private String teamKey;
+
+	@JsonProperty("team_name")
+	private String teamName;
+
+	@JsonProperty("team_badge")
+	private String teamBadge;
+
+	public Team(String teamKey, String teamName, String teamBadge) {
+		this.teamKey = teamKey;
+		this.teamName = teamName;
+		this.teamBadge = teamBadge;
 	}
-	public String getTeam_key() {
-		return team_key;
+	
+	public String getTeamKey() {
+		return teamKey;
 	}
-	public void setTeam_key(String team_key) {
-		this.team_key = team_key;
+	public void setTeamKey(String teamKey) {
+		this.teamKey = teamKey;
 	}
-	public String getTeam_name() {
-		return team_name;
+	public String getTeamName() {
+		return teamName;
 	}
-	public void setTeam_name(String team_name) {
-		this.team_name = team_name;
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
 	}
-	public String getTeam_badge() {
-		return team_badge;
+	public String getTeamBadge() {
+		return teamBadge;
 	}
-	public void setTeam_badge(String team_badge) {
-		this.team_badge = team_badge;
+	public void setTeamBadge(String teamBadge) {
+		this.teamBadge = teamBadge;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((team_key == null) ? 0 : team_key.hashCode());
-		result = prime * result + ((team_name == null) ? 0 : team_name.hashCode());
+		result = prime * result + ((teamKey == null) ? 0 : teamKey.hashCode());
+		result = prime * result + ((teamName == null) ? 0 : teamName.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -47,21 +58,26 @@ public class Team {
 		if (getClass() != obj.getClass())
 			return false;
 		Team other = (Team) obj;
-		if (team_key == null) {
-			if (other.team_key != null)
+		if (teamKey == null) {
+			if (other.teamKey != null) {
 				return false;
-		} else if (!team_key.equals(other.team_key))
+			}
+		} else if (!teamKey.equals(other.teamKey)) {
 			return false;
-		if (team_name == null) {
-			if (other.team_name != null)
+		}
+		if (teamName == null) {
+			if (other.teamName != null) {
 				return false;
-		} else if (!team_name.equals(other.team_name))
+			}
+		} else if (!teamName.equals(other.teamName)) {
 			return false;
+		}
 		return true;
 	}
+	
 	@Override
 	public String toString() {
-		return "Team [team_key=" + team_key + ", team_name=" + team_name + ", team_badge=" + team_badge + "]";
+		return "Team [team_key=" + teamKey + ", team_name=" + teamName + ", team_badge=" + teamBadge + "]";
 	}
 
 }

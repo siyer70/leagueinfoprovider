@@ -1,5 +1,6 @@
 package com.fbleague.infoserver.loaders;
 
+import static com.fbleague.infoserver.loaders.LoaderConstants.COUNTRIES_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -51,7 +52,7 @@ public class CountryLoaderTest {
 	public void shouldBeAbleToLoadCountriesInCache() {
 		CountryLoader classUnderTest = new CountryLoader();
 		classUnderTest.load(cache, target);
-		assertThat(cache.get(Loader.COUNTRIES_KEY).size()).isEqualTo(1);
+		assertThat(cache.get(COUNTRIES_KEY).size()).isEqualTo(1);
 	}
 
 }

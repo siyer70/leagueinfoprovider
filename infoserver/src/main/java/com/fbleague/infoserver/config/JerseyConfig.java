@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import com.fbleague.infoserver.cache.CacheManagerImpl;
 import com.fbleague.infoserver.resources.CriteriaResource;
 import com.fbleague.infoserver.resources.PositionResource;
 
@@ -34,65 +33,61 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Profile("!test")
 @EnableSwagger2
 public class JerseyConfig extends ResourceConfig {
-	static Logger logger = LoggerFactory.getLogger(CacheManagerImpl.class);
+	static Logger logger = LoggerFactory.getLogger(JerseyConfig.class);
 
-    @Value("${spring.jersey.application-path:/}")
-    private String apiPath;
-	
-    @Value("${server.servlet.contextPath}")
-    private String contextRoot;
-	
+	@Value("${spring.jersey.application-path:/}")
+	private String apiPath;
+
+	@Value("${server.servlet.contextPath}")
+	private String contextRoot;
+
 	@Value("${appURL}")
 	private String appURL;
-	
-    public JerseyConfig()
-    {
-    	register(CorsFilter.class);
-        register(CriteriaResource.class);
-        register(PositionResource.class);
-    }
-    
+
+	public JerseyConfig() {
+		register(CorsFilter.class);
+		register(CriteriaResource.class);
+		register(PositionResource.class);
+	}
+
 	@Bean
 	public Client client() {
 		return ClientBuilder.newClient(new ClientConfig());
 	}
-    
-    @PostConstruct
-    public void init() {
-        this.configureSwagger();
-    }
 
-    private void configureSwagger() {
-        BeanConfig swaggerConfig = new BeanConfig();
-        swaggerConfig.setConfigId("League-Infoservice");
-        swaggerConfig.setTitle("League Infoservice");
-        swaggerConfig.setVersion("v1");
-        swaggerConfig.setContact("Shekhar");
-        swaggerConfig.setSchemes(new String[] { "http", "https" });
-        swaggerConfig.setBasePath(this.contextRoot + "/" + this.apiPath);
-        swaggerConfig.setResourcePackage("com.fbleague.infoserver.resources");
-        swaggerConfig.setPrettyPrint(true);
-        swaggerConfig.setScan(true);
-        SwaggerConfigLocator.getInstance().putConfig(SwaggerContextService.CONFIG_ID_DEFAULT, swaggerConfig);
-        logger.info(getClass().getPackage().getName());
-        logger.info(ApiListingResource.class.getPackage().getName());
-        register(ApiListingResource.class);
-//        packages(getClass().getPackage().getName(),
-//                ApiListingResource.class.getPackage().getName());
-    }	
-	
+	@PostConstruct
+	public void init() {
+		this.configureSwagger();
+	}
+
+	private void configureSwagger() {
+		BeanConfig swaggerConfig = new BeanConfig();
+		swaggerConfig.setConfigId("League-Infoservice");
+		swaggerConfig.setTitle("League Infoservice");
+		swaggerConfig.setVersion("v1");
+		swaggerConfig.setContact("Shekhar");
+		swaggerConfig.setSchemes(new String[] { "http", "https" });
+		swaggerConfig.setBasePath(this.contextRoot + "/" + this.apiPath);
+		swaggerConfig.setResourcePackage("com.fbleague.infoserver.resources");
+		swaggerConfig.setPrettyPrint(true);
+		swaggerConfig.setScan(true);
+		SwaggerConfigLocator.getInstance().putConfig(SwaggerContextService.CONFIG_ID_DEFAULT, swaggerConfig);
+		logger.info(getClass().getPackage().getName());
+		logger.info(ApiListingResource.class.getPackage().getName());
+		register(ApiListingResource.class);
+	}
+
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
 				.apis(RequestHandlerSelectors.basePackage("com.fbleague.infoserver.spring.swagger.doc.controller"))
 				.paths(PathSelectors.any()).build().enable(true).apiInfo(apiInfo());
 	}
-	
+
 	private ApiInfo apiInfo() {
 		Contact contactInfo = new Contact("Shekhar", "www.mywebsite.com", "somemail@gmail.com");
 		return new ApiInfoBuilder().title("League-Infoservice")
 				.description("A service that provides the football team standing in the league")
-				.termsOfServiceUrl(appURL)
-				.contact(contactInfo).license("Apache 2.0")
-				.licenseUrl("www.apache.org").version("1.0").build();
+				.termsOfServiceUrl(appURL).contact(contactInfo).license("Apache 2.0").licenseUrl("www.apache.org")
+				.version("1.0").build();
 	}
 }

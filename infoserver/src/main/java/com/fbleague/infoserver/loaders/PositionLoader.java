@@ -1,5 +1,9 @@
 package com.fbleague.infoserver.loaders;
 
+import static com.fbleague.infoserver.loaders.LoaderConstants.COUNTRIES_KEY;
+import static com.fbleague.infoserver.loaders.LoaderConstants.LEAGUES_KEY;
+import static com.fbleague.infoserver.loaders.LoaderConstants.POSITIONS_KEY;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,30 +31,30 @@ public class PositionLoader implements Loader {
 	@Override
 	public void load(Map<String, Map<String, ? extends Object>> cache, WebTarget target) {
 		logger.info("Loading Positions");
-		Map<String, Position> positionMap = new HashMap<String, Position>();
+		Map<String, Position> positionMap = new HashMap<>();
 		cache.put(POSITIONS_KEY, positionMap);
 
 		Map<String, Country> countryMap = (Map<String, Country>) cache.get(COUNTRIES_KEY);
 		Map<String, League> leagueMap = (Map<String, League>) cache.get(LEAGUES_KEY);
 		
 		leagueMap.values().forEach(league -> {
-			logger.info("Sending request to information source for League: {}", league.getLeague_name());
+			logger.info("Sending request to information source for League: {}", league.getLeagueName());
 	        try {
 				final List<Position> positions = target.queryParam("action", "get_standings")
-						.queryParam("league_id", league.getLeague_id())
+						.queryParam("league_id", league.getLeagueId())
 						.request()
 				        .accept(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<List<Position>>() {});
-				logger.info("Request succeeded -> positions loaded for league {} : {}", league.getLeague_name(), positions.size());
+				logger.info("Request succeeded -> positions loaded for league {} : {}", league.getLeagueName(), positions.size());
 
 				positions.forEach(position -> {
-					String key = position.getCountry_name() + "|" + 
-									position.getLeague_name() + "|" +
-									position.getTeam_name();
+					String key = position.getCountryName() + "|" + 
+									position.getLeagueName() + "|" +
+									position.getTeamName();
 					logger.info(key);
-					position.setCountry_id(Optional.ofNullable(countryMap.get(position.getCountry_name())).map(c -> c.getCountry_id()).orElse("N/A"));
+					position.setCountryId(Optional.ofNullable(countryMap.get(position.getCountryName())).map(Country::getCountryId).orElse("N/A"));
 					positionMap.put(key, position);
 				});
-				logger.info("Loaded positions for league: {}", league.getLeague_name());
+				logger.info("Loaded positions for league: {}", league.getLeagueName());
 				
 			} catch (ProcessingException ex) {
 				logger.error("An error occurred while loading positions", ex);

@@ -46,20 +46,26 @@ public class Criteria {
 			return false;
 		Criteria other = (Criteria) obj;
 		if (countryName == null) {
-			if (other.countryName != null)
+			if (other.countryName != null) {
 				return false;
-		} else if (!countryName.equals(other.countryName))
+			}
+		} else if (!countryName.equals(other.countryName)) {
 			return false;
+		}
 		if (leagueName == null) {
-			if (other.leagueName != null)
+			if (other.leagueName != null) {
 				return false;
-		} else if (!leagueName.equals(other.leagueName))
+			}
+		} else if (!leagueName.equals(other.leagueName)) {
 			return false;
+		}
 		if (teamName == null) {
-			if (other.teamName != null)
+			if (other.teamName != null) {
 				return false;
-		} else if (!teamName.equals(other.teamName))
+			}
+		} else if (!teamName.equals(other.teamName)) {
 			return false;
+		}
 		return true;
 	}
 	@Override

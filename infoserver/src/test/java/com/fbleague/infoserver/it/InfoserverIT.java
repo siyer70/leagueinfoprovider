@@ -77,7 +77,7 @@ public class InfoserverIT {
 						.extract()
 						.response()
 						.as(Position.class);
-			assertThat(Integer.valueOf(position.getOverall_league_position())).isGreaterThan(0);
+			assertThat(Integer.valueOf(position.getOverallLeaguePosition())).isGreaterThan(0);
 			
 		});
 			

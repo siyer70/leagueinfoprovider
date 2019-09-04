@@ -1,5 +1,7 @@
 package com.fbleague.infoserver.cache;
 
+import static com.fbleague.infoserver.loaders.LoaderConstants.POSITIONS_KEY;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,7 +28,6 @@ import org.springframework.stereotype.Component;
 import com.fbleague.infoserver.config.ConfigManager;
 import com.fbleague.infoserver.loaders.CountryLoader;
 import com.fbleague.infoserver.loaders.LeagueLoader;
-import com.fbleague.infoserver.loaders.Loader;
 import com.fbleague.infoserver.loaders.PositionLoader;
 import com.fbleague.infoserver.loaders.TeamLoader;
 import com.fbleague.infoserver.model.Criteria;
@@ -46,13 +47,10 @@ public class CacheManagerImpl implements CacheManager {
 
 	private final LeagueLoader leagueLoader;
 
-	private final TeamLoader teamLoader;
-
 	private final PositionLoader positionLoader;
 	
 	private final Map<String, Map<String, ? extends Object>> cache; 
 	private WebTarget target=null;
-	private Timer timer = null;
 	private final AtomicInteger readers;
 	private final AtomicBoolean isWriting;
 
@@ -64,9 +62,8 @@ public class CacheManagerImpl implements CacheManager {
 		this.configManager = configManager;
 		this.countryLoader = countryLoader;
 		this.leagueLoader = leagueLoader;
-		this.teamLoader = teamLoader;
 		this.positionLoader = positionLoader;
-		this.cache = new ConcurrentHashMap<String, Map<String,? extends Object>>();
+		this.cache = new ConcurrentHashMap<>();
 		readers = new AtomicInteger();
 		isWriting = new AtomicBoolean();
  	}
@@ -82,21 +79,21 @@ public class CacheManagerImpl implements CacheManager {
 	
 	private void startTimer() {
 		TimerTask task = new CacheReloaderTimerTask(this);
-		timer = new Timer(true);
-		int delay = Integer.valueOf(configManager.getProperty("cacheReloadDelayInSeconds"));
-		int period = Integer.valueOf(configManager.getProperty("cacheReloadPeriodInSeconds"));
-		timer.schedule(task, 1000 * delay, 1000 * period);
+		Timer timer = new Timer(true);
+		int delay = Integer.parseInt(configManager.getProperty("cacheReloadDelayInSeconds"));
+		int period = Integer.parseInt(configManager.getProperty("cacheReloadPeriodInSeconds"));
+		timer.schedule(task, (long) 1000 * delay, (long) 1000 * period);
 	}
 
 	public List<Criteria> getSearchCombinations() {
 		waitForCacheUpdate();
-		List<Criteria> criteriaList = new ArrayList<Criteria>();
+		List<Criteria> criteriaList = new ArrayList<>();
 		readers.getAndIncrement();
-		Collection<Position> positions =  new ArrayList(cache.get(Loader.POSITIONS_KEY).values());
+		Collection<Position> positions =  new ArrayList(cache.get(POSITIONS_KEY).values());
 		readers.getAndDecrement();
-		positions.forEach(position -> {
-			criteriaList.add(new Criteria(position.getCountry_name(), position.getLeague_name(), position.getTeam_name()));
-		});
+		positions.forEach(position -> 
+			criteriaList.add(new Criteria(position.getCountryName(), position.getLeagueName(), position.getTeamName()))
+		);
 		criteriaList.sort(criteriaSortComparator());
 		return criteriaList;
 	}
@@ -107,7 +104,9 @@ public class CacheManagerImpl implements CacheManager {
 				logger.info("Waiting for Cache update to finish..");
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				logger.info("Thread interrupted");
+				logger.warn("Thread interrupted");
+				// Restore interrupted state...
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
@@ -115,7 +114,7 @@ public class CacheManagerImpl implements CacheManager {
 	public Position getPosition(String key) {
 		waitForCacheUpdate();
 		readers.getAndIncrement();
-		Position position = (Position) cache.get(Loader.POSITIONS_KEY).get(key);
+		Position position = (Position) cache.get(POSITIONS_KEY).get(key);
 		readers.getAndDecrement();
 		return position;
 	}
@@ -131,7 +130,6 @@ public class CacheManagerImpl implements CacheManager {
 		loadCountries();
 		loadLeagues();
 		loadPositions();
-//		loadTeams();
 		isWriting.compareAndSet(true, false);
 	}
 	
@@ -141,7 +139,9 @@ public class CacheManagerImpl implements CacheManager {
 				logger.info("Waiting for readers to finish..");
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				logger.info("Thread interrupted");
+				logger.warn("Thread interrupted");
+				// Restore interrupted state...
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
@@ -154,10 +154,6 @@ public class CacheManagerImpl implements CacheManager {
 		leagueLoader.load(cache, target);
 	}
 	
-	private void loadTeams() {
-		teamLoader.load(cache, target);
-	}
-
 	private void loadPositions() {
 		positionLoader.load(cache, target);
 	}

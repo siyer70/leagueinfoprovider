@@ -1,5 +1,7 @@
 package com.fbleague.infoserver.loaders;
 
+import static com.fbleague.infoserver.loaders.LoaderConstants.COUNTRIES_KEY;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +27,7 @@ public class CountryLoader implements Loader {
 	@Override
 	public void load(Map<String, Map<String, ? extends Object>> cache, WebTarget target) {
 		logger.info("Loading countries");
-		Map<String, Country> countryMap = new HashMap<String, Country>();
+		Map<String, Country> countryMap = new HashMap<>();
 		cache.put(COUNTRIES_KEY, countryMap);
 
 		try {
@@ -34,9 +36,9 @@ public class CountryLoader implements Loader {
 			        .accept(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<List<Country>>() {});
 			logger.info("Request succeeded -> countries loaded : {}", countries.size());
 
-			countries.forEach(country -> {
-				countryMap.put(country.getCountry_name(), country);
-			});
+			countries.forEach(country -> 
+				countryMap.put(country.getCountryName(), country)
+			);
 			logger.info("Loaded countries");
 		} catch (ProcessingException ex) {
 			logger.error("An error occurred while loading countries", ex);
