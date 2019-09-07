@@ -6,7 +6,6 @@ import java.util.Map;
 import com.fbleague.infoserver.model.Country;
 import com.fbleague.infoserver.model.League;
 import com.fbleague.infoserver.model.Position;
-import com.fbleague.infoserver.model.Team;
 
 public class TestUtils {
 	private static TestUtils INSTANCE = new TestUtils();
@@ -51,14 +50,6 @@ public class TestUtils {
 		position.setTeamName(teamName);
 		position.setOverallLeaguePosition(overallPosition);
 		return position;
-	}
-	
-	public Team buildTeamInstance(String teamId, String teamName, String badge) {
-		Team team = new Team();
-		team.setTeamKey(teamId);
-		team.setTeamName(teamName);
-		team.setTeamBadge(badge);
-		return team;
 	}
 	
 }
