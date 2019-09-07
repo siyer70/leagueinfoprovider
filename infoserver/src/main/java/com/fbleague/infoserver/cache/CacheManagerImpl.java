@@ -29,7 +29,6 @@ import com.fbleague.infoserver.config.ConfigManager;
 import com.fbleague.infoserver.loaders.CountryLoader;
 import com.fbleague.infoserver.loaders.LeagueLoader;
 import com.fbleague.infoserver.loaders.PositionLoader;
-import com.fbleague.infoserver.loaders.TeamLoader;
 import com.fbleague.infoserver.model.Criteria;
 import com.fbleague.infoserver.model.Position;
 
@@ -56,7 +55,7 @@ public class CacheManagerImpl implements CacheManager {
 
 	@Autowired
 	public CacheManagerImpl(Client client, ConfigManager configManager, CountryLoader countryLoader,
-			LeagueLoader leagueLoader, TeamLoader teamLoader, PositionLoader positionLoader) {
+			LeagueLoader leagueLoader, PositionLoader positionLoader) {
 		this.client = client;
 		this.configManager = configManager;
 		this.countryLoader = countryLoader;

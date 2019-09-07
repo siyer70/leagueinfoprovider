@@ -22,7 +22,6 @@ import com.fbleague.infoserver.config.ConfigManager;
 import com.fbleague.infoserver.loaders.CountryLoader;
 import com.fbleague.infoserver.loaders.LeagueLoader;
 import com.fbleague.infoserver.loaders.PositionLoader;
-import com.fbleague.infoserver.loaders.TeamLoader;
 import com.fbleague.infoserver.model.Position;
 import com.fbleague.infoserver.utils.TestUtils;
 
@@ -44,9 +43,6 @@ public class CacheManagerTest {
 
 	@Mock
 	LeagueLoader leagueLoader;
-
-	@Mock
-	TeamLoader teamLoader;
 
 	@Mock
 	PositionLoader positionLoader;
