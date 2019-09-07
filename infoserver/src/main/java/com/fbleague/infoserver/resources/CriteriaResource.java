@@ -22,9 +22,12 @@ import io.swagger.annotations.ApiResponse;
 @Api(value = "Criteria Resource for retrieve country, league and team combinations", produces = "application/json")
 public class CriteriaResource {
 	Logger logger = LoggerFactory.getLogger(CriteriaResource.class);
+	private CacheManager cacheManager;
 
 	@Autowired
-	CacheManager cacheManager;
+	public CriteriaResource(CacheManager cacheManager) {
+		this.cacheManager = cacheManager;
+	}
  
     @GET
     @Produces(MediaType.APPLICATION_JSON)

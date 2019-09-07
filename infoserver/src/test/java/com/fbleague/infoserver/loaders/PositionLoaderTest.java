@@ -23,9 +23,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.fbleague.infoserver.model.Country;
-import com.fbleague.infoserver.model.League;
 import com.fbleague.infoserver.model.Position;
+import com.fbleague.infoserver.utils.TestUtils;
 import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -44,28 +43,37 @@ public class PositionLoaderTest {
 	
 	@Before
 	public void setup() {
-		Map<String, Country> countryMap = new HashMap<>();
-		countryMap.put("IN", new Country("IN", "India"));
-		
-		Map<String, League> leagueMap = new HashMap<>();
-		leagueMap.put("LID", new League("IN", "India", "LID", "Ligue 2"));
-		
-		cache.put(COUNTRIES_KEY, countryMap);
-		cache.put(LEAGUES_KEY, leagueMap);
-		List<Position> positions = Lists.<Position>newArrayList(new Position("India", "Ligue 2", "Some team", "1"));
 		when(target.queryParam(any(), any()))
 			.thenReturn(target);
 		when(target.request()).thenReturn(builder);
 		when(builder.accept(MediaType.APPLICATION_JSON)).thenReturn(builder);
 		when(builder.get()).thenReturn(response);
-		when(response.readEntity(new GenericType<List<Position>>() {})).thenReturn(positions);
 	}
 	
 	@Test
 	public void shouldBeAbleToLoadPositionsInCache() {
+		// Test utility for test data generation
+		TestUtils testUtils = TestUtils.getInstance();
+
+		// Country and League Maps are  dependencies of Position Loader (the class under test)
+		cache.put(COUNTRIES_KEY, testUtils.buildCountryMap("IN", "India"));
+		cache.put(LEAGUES_KEY, testUtils.buildLeagueMap("IN", "India", "LID", "Ligue 2"));
+		
+		// build test data and set expectations
+		Position position = testUtils.buildPositionInstance("India", "Ligue 2", "Some team", "1");
+		when(response.readEntity(new GenericType<List<Position>>() {})).thenReturn(
+				Lists.<Position>newArrayList(position));
+
+		// execute test
 		PositionLoader classUnderTest = new PositionLoader();
+		String positionKey = classUnderTest.getPositionKey(position);
 		classUnderTest.load(cache, target);
-		assertThat(cache.get(POSITIONS_KEY).size()).isEqualTo(1);
+		
+		// assert results - ensure that positions are loaded in cache
+		Map<String, ? extends Object> positionMap = cache.get(POSITIONS_KEY);
+		assertThat(positionMap.size()).isEqualTo(1);
+		assertThat(positionMap.containsKey(positionKey)).isEqualTo(true);
+		assertThat(((Position) positionMap.get(positionKey)).toString()).isEqualTo(position.toString());		
 	}
 
 }

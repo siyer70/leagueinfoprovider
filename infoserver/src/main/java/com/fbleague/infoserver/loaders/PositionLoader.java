@@ -47,9 +47,7 @@ public class PositionLoader implements Loader {
 				logger.info("Request succeeded -> positions loaded for league {} : {}", league.getLeagueName(), positions.size());
 
 				positions.forEach(position -> {
-					String key = position.getCountryName() + "|" + 
-									position.getLeagueName() + "|" +
-									position.getTeamName();
+					String key = getPositionKey(position);
 					logger.info(key);
 					position.setCountryId(Optional.ofNullable(countryMap.get(position.getCountryName())).map(Country::getCountryId).orElse("N/A"));
 					positionMap.put(key, position);
@@ -62,6 +60,12 @@ public class PositionLoader implements Loader {
 			
 		});
 
+	}
+	
+	public String getPositionKey(Position position) {
+		return position.getCountryName() + "|" + 
+				position.getLeagueName() + "|" +
+				position.getTeamName();
 	}
 
 }

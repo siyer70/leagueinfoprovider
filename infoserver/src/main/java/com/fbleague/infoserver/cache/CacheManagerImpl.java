@@ -38,7 +38,7 @@ import com.fbleague.infoserver.model.Position;
 public class CacheManagerImpl implements CacheManager {
 
 	static Logger logger = LoggerFactory.getLogger(CacheManagerImpl.class);
-	
+
 	private final Client client;
 
 	private final ConfigManager configManager;
@@ -48,16 +48,15 @@ public class CacheManagerImpl implements CacheManager {
 	private final LeagueLoader leagueLoader;
 
 	private final PositionLoader positionLoader;
-	
-	private final Map<String, Map<String, ? extends Object>> cache; 
-	private WebTarget target=null;
+
+	private final Map<String, Map<String, ? extends Object>> cache;
+	private WebTarget target = null;
 	private final AtomicInteger readers;
 	private final AtomicBoolean isWriting;
 
 	@Autowired
-	public CacheManagerImpl(Client client, ConfigManager configManager,
-			CountryLoader countryLoader, LeagueLoader leagueLoader,
-			TeamLoader teamLoader, PositionLoader positionLoader) {
+	public CacheManagerImpl(Client client, ConfigManager configManager, CountryLoader countryLoader,
+			LeagueLoader leagueLoader, TeamLoader teamLoader, PositionLoader positionLoader) {
 		this.client = client;
 		this.configManager = configManager;
 		this.countryLoader = countryLoader;
@@ -66,8 +65,8 @@ public class CacheManagerImpl implements CacheManager {
 		this.cache = new ConcurrentHashMap<>();
 		readers = new AtomicInteger();
 		isWriting = new AtomicBoolean();
- 	}
-	
+	}
+
 	@PostConstruct
 	private void init() {
 		logger.info("Post Construct is called for loader");
@@ -75,8 +74,7 @@ public class CacheManagerImpl implements CacheManager {
 		loadOrReloadCache(); // load it initially
 		startTimer();
 	}
-	
-	
+
 	private void startTimer() {
 		TimerTask task = new CacheReloaderTimerTask(this);
 		Timer timer = new Timer(true);
@@ -89,17 +87,16 @@ public class CacheManagerImpl implements CacheManager {
 		waitForCacheUpdate();
 		List<Criteria> criteriaList = new ArrayList<>();
 		readers.getAndIncrement();
-		Collection<Position> positions =  new ArrayList(cache.get(POSITIONS_KEY).values());
+		Collection<Position> positions = new ArrayList(cache.get(POSITIONS_KEY).values());
 		readers.getAndDecrement();
-		positions.forEach(position -> 
-			criteriaList.add(new Criteria(position.getCountryName(), position.getLeagueName(), position.getTeamName()))
-		);
+		positions.forEach(position -> criteriaList
+				.add(new Criteria(position.getCountryName(), position.getLeagueName(), position.getTeamName())));
 		criteriaList.sort(criteriaSortComparator());
 		return criteriaList;
 	}
 
 	private void waitForCacheUpdate() {
-		while(isWriting.get()) {
+		while (isWriting.get()) {
 			try {
 				logger.info("Waiting for Cache update to finish..");
 				Thread.sleep(100);
@@ -120,10 +117,10 @@ public class CacheManagerImpl implements CacheManager {
 	}
 
 	private Comparator<Criteria> criteriaSortComparator() {
-		return (Criteria c1, Criteria c2) -> (c1.getCountryName()+c1.getLeagueName()+c1.getTeamName()).compareTo(
-				(c2.getCountryName()+c2.getLeagueName()+c2.getTeamName()));
+		return (Criteria c1, Criteria c2) -> (c1.getCountryName() + c1.getLeagueName() + c1.getTeamName())
+				.compareTo((c2.getCountryName() + c2.getLeagueName() + c2.getTeamName()));
 	}
-	
+
 	public void loadOrReloadCache() {
 		waitForReadersToRead();
 		isWriting.compareAndSet(false, true);
@@ -132,9 +129,9 @@ public class CacheManagerImpl implements CacheManager {
 		loadPositions();
 		isWriting.compareAndSet(true, false);
 	}
-	
+
 	private void waitForReadersToRead() {
-		while(readers.intValue()>0) {
+		while (readers.intValue() > 0) {
 			try {
 				logger.info("Waiting for readers to finish..");
 				Thread.sleep(100);
@@ -149,28 +146,28 @@ public class CacheManagerImpl implements CacheManager {
 	private void loadCountries() {
 		countryLoader.load(cache, target);
 	}
-	
+
 	private void loadLeagues() {
 		leagueLoader.load(cache, target);
 	}
-	
+
 	private void loadPositions() {
 		positionLoader.load(cache, target);
 	}
 
-    private URI getBaseURI() {
-    	String baseURL = configManager.getProperty("baseURL");
-    	logger.info("BaseURL is: {}", baseURL);
-        return UriBuilder.fromUri(baseURL).build();
-    }
-    
-    static class CacheReloaderTimerTask extends TimerTask {
-    	
-    	private CacheManager cacheManager;
+	private URI getBaseURI() {
+		String baseURL = configManager.getProperty("baseURL");
+		logger.info("BaseURL is: {}", baseURL);
+		return UriBuilder.fromUri(baseURL).build();
+	}
+
+	static class CacheReloaderTimerTask extends TimerTask {
+
+		private CacheManager cacheManager;
 
 		public CacheReloaderTimerTask(CacheManager cacheManager) {
 			this.cacheManager = cacheManager;
-    	}
+		}
 
 		@Override
 		public void run() {
@@ -178,7 +175,7 @@ public class CacheManagerImpl implements CacheManager {
 			cacheManager.loadOrReloadCache();
 			logger.info("Cache reloading ended");
 		}
-    	
-    }
-	
+
+	}
+
 }

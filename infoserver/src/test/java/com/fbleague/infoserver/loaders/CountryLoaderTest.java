@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.fbleague.infoserver.model.Country;
+import com.fbleague.infoserver.utils.TestUtils;
 import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,19 +42,29 @@ public class CountryLoaderTest {
 	
 	@Before
 	public void setup() {
-		List<Country> countries = Lists.<Country>newArrayList(new Country("IN", "India"));
 		when(target.queryParam(any(), any())).thenReturn(target);
 		when(target.request()).thenReturn(builder);
 		when(builder.accept(MediaType.APPLICATION_JSON)).thenReturn(builder);
 		when(builder.get()).thenReturn(response);
-		when(response.readEntity(new GenericType<List<Country>>() {})).thenReturn(countries);
 	}
 	
 	@Test
-	public void shouldBeAbleToLoadCountriesInCache() {
+	public void shouldBeAbleToLoadCountriesInCache() throws IOException {
+		// Generate test data and set expectations
+		String key = "India";
+		Country countryIndia = new TestUtils().buildCountryInstance("IN", key);
+		List<Country> countries = Lists.<Country>newArrayList(countryIndia);
+		when(response.readEntity(new GenericType<List<Country>>() {})).thenReturn(countries);
+
+		// execute the class under test
 		CountryLoader classUnderTest = new CountryLoader();
 		classUnderTest.load(cache, target);
-		assertThat(cache.get(COUNTRIES_KEY).size()).isEqualTo(1);
+		Map<String, ? extends Object> countryMap = cache.get(COUNTRIES_KEY);
+		
+		// assert the results - ensure that country loader loaded the test data in cache
+		assertThat(countryMap.size()).isEqualTo(1);
+		assertThat(countryMap.containsKey(key)).isEqualTo(true);
+		assertThat(((Country) countryMap.get(key)).toString()).isEqualTo(countryIndia.toString());
 	}
 
 }

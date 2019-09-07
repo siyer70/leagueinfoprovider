@@ -1,5 +1,6 @@
 package com.fbleague.infoserver.cache;
 
+import static com.fbleague.infoserver.loaders.LoaderConstants.POSITIONS_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -17,15 +18,13 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import com.fbleague.infoserver.cache.CacheManagerImpl;
 import com.fbleague.infoserver.config.ConfigManager;
 import com.fbleague.infoserver.loaders.CountryLoader;
 import com.fbleague.infoserver.loaders.LeagueLoader;
-import com.fbleague.infoserver.loaders.Loader;
 import com.fbleague.infoserver.loaders.PositionLoader;
 import com.fbleague.infoserver.loaders.TeamLoader;
 import com.fbleague.infoserver.model.Position;
-import static com.fbleague.infoserver.loaders.LoaderConstants.*;
+import com.fbleague.infoserver.utils.TestUtils;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -52,7 +51,7 @@ public class CacheManagerTest {
 	@Mock
 	PositionLoader positionLoader;
 	
-	private final Position samplePositionObject = new Position("India", "Ligue 2", "Some team", "1");
+	private final Position samplePositionObject = new TestUtils().buildPositionInstance("India", "Ligue 2", "Some team", "1");
 	private final String samplePositionObjectKey = "India|Ligue 2|Some team";
 
 	private final Answer<Object> answer = new Answer<Object>() {
