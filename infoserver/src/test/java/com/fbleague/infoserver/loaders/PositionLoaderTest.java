@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -41,8 +42,17 @@ public class PositionLoaderTest {
 	@Mock
 	Response response;
 	
+	// Test utility for test data generation
+	TestUtils testUtils = TestUtils.getInstance();
+
 	@Before
 	public void setup() {
+		cache = new HashMap<>();
+		
+		// Country and League Maps are  dependencies of Position Loader (the class under test)
+		cache.put(COUNTRIES_KEY, testUtils.buildCountryMap("IN", "India"));
+		cache.put(LEAGUES_KEY, testUtils.buildLeagueMap("IN", "India", "LID", "Ligue 2"));
+		
 		when(target.queryParam(any(), any()))
 			.thenReturn(target);
 		when(target.request()).thenReturn(builder);
@@ -52,13 +62,6 @@ public class PositionLoaderTest {
 	
 	@Test
 	public void shouldBeAbleToLoadPositionsInCache() {
-		// Test utility for test data generation
-		TestUtils testUtils = TestUtils.getInstance();
-
-		// Country and League Maps are  dependencies of Position Loader (the class under test)
-		cache.put(COUNTRIES_KEY, testUtils.buildCountryMap("IN", "India"));
-		cache.put(LEAGUES_KEY, testUtils.buildLeagueMap("IN", "India", "LID", "Ligue 2"));
-		
 		// build test data and set expectations
 		Position position = testUtils.buildPositionInstance("India", "Ligue 2", "Some team", "1");
 		when(response.readEntity(new GenericType<List<Position>>() {})).thenReturn(
@@ -75,5 +78,20 @@ public class PositionLoaderTest {
 		assertThat(positionMap.containsKey(positionKey)).isEqualTo(true);
 		assertThat(((Position) positionMap.get(positionKey)).toString()).isEqualTo(position.toString());		
 	}
+	
+	@Test
+	public void shouldGracefullyHandleExceptions() {
+		when(response.readEntity(new GenericType<List<Position>>() {})).thenThrow(
+				new ProcessingException("Some error occurrred"));
+
+		// execute test
+		PositionLoader classUnderTest = new PositionLoader();
+		classUnderTest.load(cache, target);
+		
+		// assert results - ensure that positions aren't loaded in cache
+		Map<String, ? extends Object> positionMap = cache.get(POSITIONS_KEY);
+		assertThat(positionMap.size()).isEqualTo(0);
+	}
+	
 
 }

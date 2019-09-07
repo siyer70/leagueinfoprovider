@@ -5,11 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -29,7 +29,7 @@ import com.google.common.collect.Lists;
 @RunWith(MockitoJUnitRunner.class)
 public class CountryLoaderTest {
 
-	Map<String, Map<String, ? extends Object>> cache = new HashMap<>();
+	Map<String, Map<String, ? extends Object>> cache;
 	
 	@Mock
 	WebTarget target;
@@ -42,6 +42,8 @@ public class CountryLoaderTest {
 	
 	@Before
 	public void setup() {
+		cache = new HashMap<>();
+		
 		when(target.queryParam(any(), any())).thenReturn(target);
 		when(target.request()).thenReturn(builder);
 		when(builder.accept(MediaType.APPLICATION_JSON)).thenReturn(builder);
@@ -49,7 +51,7 @@ public class CountryLoaderTest {
 	}
 	
 	@Test
-	public void shouldBeAbleToLoadCountriesInCache() throws IOException {
+	public void shouldBeAbleToLoadCountriesInCache() {
 		// Generate test data and set expectations
 		String key = "India";
 		Country countryIndia = new TestUtils().buildCountryInstance("IN", key);
@@ -65,6 +67,21 @@ public class CountryLoaderTest {
 		assertThat(countryMap.size()).isEqualTo(1);
 		assertThat(countryMap.containsKey(key)).isEqualTo(true);
 		assertThat(((Country) countryMap.get(key)).toString()).isEqualTo(countryIndia.toString());
+		
 	}
+	
+	@Test
+	public void shouldGraceFullyHandleExceptions() {
+		when(response.readEntity(new GenericType<List<Country>>() {}))
+			.thenThrow(new ProcessingException("Some exception occurred"));
+
+		CountryLoader classUnderTest = new CountryLoader();
+		classUnderTest.load(cache, target);
+		
+		// ensure cache does not have any object loaded
+		Map<String, ? extends Object> countryMap = cache.get(COUNTRIES_KEY);
+		assertThat(countryMap.size()).isEqualTo(0);
+	}
+	
 
 }

@@ -46,11 +46,8 @@ public class TestUtils {
 	public Position buildPositionInstance(String countryName,
 		String leagueName, String teamName, String overallPosition) {
 		Position position = new Position();
-		position.setCountryId("notrequired");
 		position.setCountryName(countryName);
-		position.setLeagueId("notrequired");
 		position.setLeagueName(leagueName);
-		position.setTeamId("notrequired");
 		position.setTeamName(teamName);
 		position.setOverallLeaguePosition(overallPosition);
 		return position;

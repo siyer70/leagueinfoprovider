@@ -13,7 +13,7 @@ public class InfoserverApplicationTest {
 
 	@Test
 	public void shouldBeAbleToStartApplicationWithoutTomcat() {
-		// Coverage for main class
+		// Coverage for main 
 	}
 	
 }
