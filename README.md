@@ -14,17 +14,45 @@ Setup Steps
 2.	Build the code with the under-mentioned command
 		
 		Command: “jenkins/scripts/build.sh DEV 1.0” (use “jenkins/scripts/build.sh PROD 1.0” for PROD)
-		Use Gitbash for Windows to run the above
+		In Windows - Use gitbash to run the above
 		
-3.	Start the services:  bin/start.sh (MAC / Linux) or bin\start.bat (Windows)
+3.	Start the services:  
+
+		In MAC / Ubuntu - use the following command:
+		bin/start.sh [PROD | DEV] 
+		for example: 
+			bin/start.sh DEV
+			or
+			bin/start.sh PROD
+			(default is PROD - if you don't specify any param, it will start in PROD mode)
 		
-		You can stop the services by using: bin/stop.sh (MAC / Linux) - In Windows – simply close the spawned windows
+		In Windows - use the following command:
+		bin\start.bat
+		(It will always start in DEV mode)
+
+4.	To stop the services:
 	
-4.	Check the status of the service: bin/status.sh (MAC / Linux) - In Windows, status is visible in the spawned windows
+		In MAC / Ubuntu - use the following command
+		bin/stop.sh [PROD | DEV] 
+
+		In Windows – simply close the spawned windows
+	
+4.	Check the status of the service: 
+
+		In MAC / Ubuntu - use the following command
+		bin/status.sh [PROD | DEV] 
+
+		In Windows, status is visible in the spawned windows
+
+Other Notes
 		
-		a. Status should be running
-		b. UI code runs in 3000 port of localhost (npm start default) – In Prod, port 8400 is used in EC2 host
-		c. Service runs in 8500 port of localhost – In Prod, same port is used in EC2 host
+		a. UI Code (applicable for MAC / Linux / Windows)
+			- In dev mode, UI code runs in port 3000 of localhost (npm start default) 
+			– In Prod, port 8400 is used in EC2 ubuntu host
+
+		b. Service (applicable for MAC / Linux / Windows)
+			- In dev mode, it runs in 8080 port of localhost (default port of tomcat) 
+			– In Prod, 8500 port is used in EC2 ubuntu host
 		
 		So, you can access the app using url: 
 		
@@ -37,5 +65,5 @@ Setup Steps
 		
 		And access the API service using the swagger url:
 				
-				Local:  http://localhost:8500/v1/swagger-ui.html 
+				Local:  http://localhost:8080/v1/swagger-ui.html 
 				Prod: http://13.58.209.5:8080/v1/swagger-ui.html

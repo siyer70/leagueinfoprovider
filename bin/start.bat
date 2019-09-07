@@ -6,7 +6,7 @@ echo %homedir%
 IF NOT EXIST "%homedir%\logs" (mkdir %homedir%\logs) 
 cd %homedir%
 echo "Starting API Server.."
-start java -Dserver.port=8500 -jar releases\%ENVIRONMENT%\infoserver-%VERSION%\infoserver-%VERSION%.jar > logs\apiserver.log 2>&1
+start java -Dserver.port=8080 -jar releases\%ENVIRONMENT%\infoserver-%VERSION%\infoserver-%VERSION%.jar > logs\apiserver.log 2>&1
 timeout /t 20
 echo "Starting Web Server.."
 cd league-info-app\
