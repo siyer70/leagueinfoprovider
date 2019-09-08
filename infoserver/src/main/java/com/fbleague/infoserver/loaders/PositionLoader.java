@@ -1,11 +1,13 @@
 package com.fbleague.infoserver.loaders;
 
+import static com.fbleague.infoserver.loaders.LoaderConstants.COUNTRIES_KEY;
 import static com.fbleague.infoserver.loaders.LoaderConstants.LEAGUES_KEY;
 import static com.fbleague.infoserver.loaders.LoaderConstants.POSITIONS_KEY;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.WebTarget;
@@ -17,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import com.fbleague.infoserver.model.Country;
 import com.fbleague.infoserver.model.League;
 import com.fbleague.infoserver.model.Position;
 
@@ -31,6 +34,7 @@ public class PositionLoader implements Loader {
 		Map<String, Position> positionMap = new HashMap<>();
 		cache.put(POSITIONS_KEY, positionMap);
 
+		Map<String, Country> countryMap = (Map<String, Country>) cache.get(COUNTRIES_KEY);
 		Map<String, League> leagueMap = (Map<String, League>) cache.get(LEAGUES_KEY);
 		
 		leagueMap.values().forEach(league -> {
@@ -45,6 +49,7 @@ public class PositionLoader implements Loader {
 				positions.forEach(position -> {
 					String key = getPositionKey(position);
 					logger.info(key);
+					position.setCountryId(Optional.ofNullable(countryMap.get(position.getCountryName())).map(Country::getCountryId).orElse("N/A"));
 					positionMap.put(key, position);
 				});
 				logger.info("Loaded positions for league: {}", league.getLeagueName());
