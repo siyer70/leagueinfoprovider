@@ -61,7 +61,7 @@ public class CacheReloadTimerTest {
 		
 	}
 	
-	static class MyTestCacheReloadTimerTask extends CacheReloadTimerTask {
+	private static class MyTestCacheReloadTimerTask extends CacheReloadTimerTask {
 		int counter = 0;
 		private final Object obj;
 		private final int numTimes;

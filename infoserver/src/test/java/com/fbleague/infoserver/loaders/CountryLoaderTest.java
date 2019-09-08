@@ -71,7 +71,7 @@ public class CountryLoaderTest {
 	}
 	
 	@Test
-	public void shouldGraceFullyHandleExceptions() {
+	public void shouldGracefullyHandleExceptions() {
 		when(response.readEntity(new GenericType<List<Country>>() {}))
 			.thenThrow(new ProcessingException("Some exception occurred"));
 
