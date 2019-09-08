@@ -1,6 +1,10 @@
-This section only covers how to setup and run the solution locally
+League Info Server - A Service that lets you know your favourite football team standing
 
-For a deep dive on the architecture, tech stack, implementation and testing details, please find the "LeagueServerDocumentation.pdf" in the docs folder.
+This section covers how to setup and run the solution locally
+
+(For a deep dive on the architecture, tech stack, implementation and testing details, please find the "LeagueServerDocumentation.pdf" in the docs folder once you have checked out the source. Full path of the document is: https://pscode.lioncloud.net/chasrini/leagueinfoserver/blob/master/docs/LeagueInfoServerDocumentation.pdf)
+
+Kindly follow the steps for setup
 
 Pre-requisites
 
@@ -10,7 +14,7 @@ Pre-requisites
 	Install JMeter (Optional)
 	
 Setup Steps
-1.	Check out the code from github (git clone https://github.com/siyer70/leagueinfoserver)
+1.	Check out the code from github (git clone https://pscode.lioncloud.net/chasrini/leagueinfoserver.git)
 		
 		Once checked-out, Change directory to this folder
 		Note: All under-mentioned commands are to be executed from this root directory of the checked-out folder only
