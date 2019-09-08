@@ -44,6 +44,7 @@ public class PositionResourceTest {
 		assertThat(((Position)response.getEntity()).toString()).isEqualTo(position.toString());
 	}
 
+	@Test
 	public void shouldNotReturnPositionForInvalidSearchKey() {
 		// set expectations
 		when(cacheManager.getPosition(any())).thenReturn(null);
@@ -54,6 +55,6 @@ public class PositionResourceTest {
 		// assert that result contains the test data in response and response is 404
 		assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
 		assertThat(response.getEntity()).isInstanceOf(String.class);
-		assertThat(((Position)response.getEntity()).toString()).isEqualTo("Invalid country or league or team");
+		assertThat(((String)response.getEntity()).toString()).isEqualTo("Invalid country or league or team");
 	}
 }

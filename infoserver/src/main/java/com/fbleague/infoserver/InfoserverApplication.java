@@ -11,14 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 
 
-@SpringBootApplication(
-	    scanBasePackages = {
-	    		"com.fbleague.infoserver", 
-	    		"com.fbleague.infoserver.config", 
-	    		"com.fbleague.infoserver.resources",
-	    		"io.swagger.jaxrs.listing"
-	        }		
-)
+@SpringBootApplication
 public class InfoserverApplication {
 	static Logger logger = LoggerFactory.getLogger(InfoserverApplication.class);
 
@@ -29,11 +22,11 @@ public class InfoserverApplication {
 	private int port;
 	
 	public static void main(String[] args) {
-		SpringApplication.run(InfoserverApplication.class, args);	
+		SpringApplication.run(InfoserverApplication.class);	
 	}
 	
 	@PostConstruct
-	public void init() {
+	private void init() {
 	    logger.info("server.port : {}", port);
 	    logger.info("environment.getProperty(\"server.port\") : {}", environment.getProperty("server.port"));
 	}

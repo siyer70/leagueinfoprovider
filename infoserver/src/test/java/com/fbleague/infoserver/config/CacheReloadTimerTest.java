@@ -1,6 +1,7 @@
 package com.fbleague.infoserver.config;
 
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -8,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class CacheReloadTimerTest {
 		// set expectations for mocked objects
 		when(configManager.getProperty("cacheReloadDelay")).thenReturn("10");
 		when(configManager.getProperty("cacheReloadPeriod")).thenReturn("10");
-		Mockito.doNothing().when(cacheManager).loadOrReloadCache();
+		doNothing().when(cacheManager).loadOrReloadCache();
 		
 		// number of times to execute cache reload
 		int numTimes = 3;

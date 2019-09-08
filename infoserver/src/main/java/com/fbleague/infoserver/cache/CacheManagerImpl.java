@@ -38,37 +38,33 @@ public class CacheManagerImpl implements CacheManager {
 
 	static Logger logger = LoggerFactory.getLogger(CacheManagerImpl.class);
 
-	private final Client client;
+	@Autowired
+	private Client client;
 
-	private final ConfigManager configManager;
+	@Autowired
+	private ConfigManager configManager;
 
-	private final CountryLoader countryLoader;
+	@Autowired
+	private CountryLoader countryLoader;
 
-	private final LeagueLoader leagueLoader;
+	@Autowired
+	private LeagueLoader leagueLoader;
 
-	private final PositionLoader positionLoader;
+	@Autowired
+	private PositionLoader positionLoader;
 
-	private final CacheReloadTimer timer;
+	@Autowired
+	private CacheReloadTimer timer;
 
-	private final CacheReloadTimerTask task;
+	@Autowired
+	private CacheReloadTimerTask task;
 
 	private final Map<String, Map<String, ? extends Object>> cache;
 	private WebTarget target = null;
 	private final AtomicInteger readers;
 	private final AtomicBoolean isWriting;
 
-	@Autowired
-	public CacheManagerImpl(Client client, ConfigManager configManager, CountryLoader countryLoader,
-			LeagueLoader leagueLoader, PositionLoader positionLoader,
-			CacheReloadTimer timer, 
-			CacheReloadTimerTask task) {
-		this.client = client;
-		this.configManager = configManager;
-		this.countryLoader = countryLoader;
-		this.leagueLoader = leagueLoader;
-		this.positionLoader = positionLoader;
-		this.timer = timer;
-		this.task = task;
+	public CacheManagerImpl() {
 		this.cache = new ConcurrentHashMap<>();
 		readers = new AtomicInteger();
 		isWriting = new AtomicBoolean();

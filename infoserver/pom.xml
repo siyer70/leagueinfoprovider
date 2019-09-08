@@ -18,6 +18,10 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<it.skip>true</it.skip>
+		<sonar.exclusions>
+			**/InfoserverApplication.java,
+			**/LoaderConstants.java
+		</sonar.exclusions>
 	</properties>
 
 	<dependencies>

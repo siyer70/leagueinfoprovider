@@ -3,21 +3,29 @@ package com.fbleague.infoserver.cache;
 import static com.fbleague.infoserver.loaders.LoaderConstants.POSITIONS_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.WebTarget;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
+import com.fbleague.infoserver.config.CacheReloadTimer;
+import com.fbleague.infoserver.config.CacheReloadTimerTask;
 import com.fbleague.infoserver.config.ConfigManager;
 import com.fbleague.infoserver.loaders.CountryLoader;
 import com.fbleague.infoserver.loaders.LeagueLoader;
@@ -36,6 +44,9 @@ public class CacheManagerTest {
 	Client client;
 	
 	@Mock
+	WebTarget target;
+	
+	@Mock
 	ConfigManager configManager;
 	
 	@Mock
@@ -46,6 +57,12 @@ public class CacheManagerTest {
 
 	@Mock
 	PositionLoader positionLoader;
+	
+	@Mock
+	CacheReloadTimer timer;
+	
+	@Mock
+	CacheReloadTimerTask task;
 	
 	private final Position samplePositionObject = new TestUtils().buildPositionInstance("India", "Ligue 2", "Some team", "1");
 	private final String samplePositionObjectKey = "India|Ligue 2|Some team";
@@ -76,5 +93,6 @@ public class CacheManagerTest {
 		cacheManager.loadOrReloadCache();
 		assertThat(cacheManager.getPosition(samplePositionObjectKey)).isEqualTo(samplePositionObject);
 	}
+	
 	
 }
