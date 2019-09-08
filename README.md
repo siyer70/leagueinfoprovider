@@ -1,3 +1,7 @@
+This section only covers how to setup and run the solution locally
+
+For a deep dive on the architecture, tech stack, implementation and testing details, please find the "LeagueServerDocumentation.pdf" in the docs folder.
+
 Pre-requisites
 
 	Install Java 8
