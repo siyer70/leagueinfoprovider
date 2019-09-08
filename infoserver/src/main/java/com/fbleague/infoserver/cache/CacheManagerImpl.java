@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import com.fbleague.infoserver.config.CacheReloadTimer;
+import com.fbleague.infoserver.config.CacheReloadTimerTask;
 import com.fbleague.infoserver.config.ConfigManager;
 import com.fbleague.infoserver.loaders.CountryLoader;
 import com.fbleague.infoserver.loaders.LeagueLoader;
@@ -48,6 +48,10 @@ public class CacheManagerImpl implements CacheManager {
 
 	private final PositionLoader positionLoader;
 
+	private final CacheReloadTimer timer;
+
+	private final CacheReloadTimerTask task;
+
 	private final Map<String, Map<String, ? extends Object>> cache;
 	private WebTarget target = null;
 	private final AtomicInteger readers;
@@ -55,12 +59,16 @@ public class CacheManagerImpl implements CacheManager {
 
 	@Autowired
 	public CacheManagerImpl(Client client, ConfigManager configManager, CountryLoader countryLoader,
-			LeagueLoader leagueLoader, PositionLoader positionLoader) {
+			LeagueLoader leagueLoader, PositionLoader positionLoader,
+			CacheReloadTimer timer, 
+			CacheReloadTimerTask task) {
 		this.client = client;
 		this.configManager = configManager;
 		this.countryLoader = countryLoader;
 		this.leagueLoader = leagueLoader;
 		this.positionLoader = positionLoader;
+		this.timer = timer;
+		this.task = task;
 		this.cache = new ConcurrentHashMap<>();
 		readers = new AtomicInteger();
 		isWriting = new AtomicBoolean();
@@ -69,17 +77,14 @@ public class CacheManagerImpl implements CacheManager {
 	@PostConstruct
 	private void init() {
 		logger.info("Post Construct is called for loader");
+		task.setCacheManager(this);
 		this.target = client.target(getBaseURI()).queryParam("APIkey", configManager.getProperty("apikey"));
 		loadOrReloadCache(); // load it initially
 		startTimer();
 	}
 
 	private void startTimer() {
-		TimerTask task = new CacheReloaderTimerTask(this);
-		Timer timer = new Timer(true);
-		int delay = Integer.parseInt(configManager.getProperty("cacheReloadDelayInSeconds"));
-		int period = Integer.parseInt(configManager.getProperty("cacheReloadPeriodInSeconds"));
-		timer.schedule(task, (long) 1000 * delay, (long) 1000 * period);
+		timer.startTimer(task);
 	}
 
 	public List<Criteria> getSearchCombinations() {
@@ -89,7 +94,9 @@ public class CacheManagerImpl implements CacheManager {
 		Collection<Position> positions = new ArrayList(cache.get(POSITIONS_KEY).values());
 		readers.getAndDecrement();
 		positions.forEach(position -> criteriaList
-				.add(new Criteria(position.getCountryName(), position.getLeagueName(), position.getTeamName())));
+				.add(new Criteria(position.getCountryName(), 
+									position.getLeagueName(), 
+									position.getTeamName())));
 		criteriaList.sort(criteriaSortComparator());
 		return criteriaList;
 	}
@@ -160,21 +167,5 @@ public class CacheManagerImpl implements CacheManager {
 		return UriBuilder.fromUri(baseURL).build();
 	}
 
-	static class CacheReloaderTimerTask extends TimerTask {
-
-		private CacheManager cacheManager;
-
-		public CacheReloaderTimerTask(CacheManager cacheManager) {
-			this.cacheManager = cacheManager;
-		}
-
-		@Override
-		public void run() {
-			logger.info("Cache reloading started..");
-			cacheManager.loadOrReloadCache();
-			logger.info("Cache reloading ended");
-		}
-
-	}
 
 }
