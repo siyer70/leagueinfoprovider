@@ -2,12 +2,15 @@ package com.fbleague.infoserver.resources;
 
 import static org.mockito.Mockito.when;
 
+import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
@@ -22,6 +25,9 @@ public class PositionResourceTest {
 	@Mock
 	CacheManager cacheManager;
 	
+	@Mock
+	AsyncResponse ar;
+	
 	@InjectMocks
 	PositionResource classUnderTest;
 	
@@ -35,8 +41,14 @@ public class PositionResourceTest {
 				countryName, leagueName, teamName, "1");
 		when(cacheManager.getPosition(any())).thenReturn(position);
 		
+		ArgumentCaptor<Response> acResponse = ArgumentCaptor.forClass(Response.class);
+		
 		// execute test
-		Response response = classUnderTest.getPosition(countryName, leagueName, teamName);
+		classUnderTest.getPosition(countryName, leagueName, teamName, ar);
+		
+		Mockito.verify(ar).resume(acResponse.capture());
+		
+		Response response = (Response) acResponse.getValue();
 		
 		// assert that result contains the test data in response and response is 200 OK
 		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
@@ -49,8 +61,14 @@ public class PositionResourceTest {
 		// set expectations
 		when(cacheManager.getPosition(any())).thenReturn(null);
 		
+		ArgumentCaptor<Response> acResponse = ArgumentCaptor.forClass(Response.class);
+
 		// execute test
-		Response response = classUnderTest.getPosition("xxxx", "xxxx", "Lens");
+		classUnderTest.getPosition("xxxx", "xxxx", "Lens", ar);
+		
+		Mockito.verify(ar).resume(acResponse.capture());
+		
+		Response response = (Response) acResponse.getValue();
 		
 		// assert that result contains the test data in response and response is 404
 		assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());

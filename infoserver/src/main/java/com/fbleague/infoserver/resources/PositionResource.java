@@ -1,14 +1,18 @@
 package com.fbleague.infoserver.resources;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.server.ManagedAsync;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = "Position Resource for handling position queries", produces = "application/json")
 public class PositionResource {
 	private static final String UNKNOWN = "UnKnown";
+	private static final String OPERATION_TIMED_OUT = "Operation Timed out";
 
 	Logger logger = LoggerFactory.getLogger(PositionResource.class);
 
@@ -33,6 +38,7 @@ public class PositionResource {
 	CacheManager cacheManager;
     
     @GET
+    @ManagedAsync
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(            //Swagger Annotation
@@ -40,13 +46,20 @@ public class PositionResource {
             response = Response.class)
     @ApiResponses(value = {       //Swagger Annotation
             @ApiResponse(code = 200, message = "Results successfully retrieved for the given query"),
-            @ApiResponse(code = 404, message = "No such Country or team or league")
+            @ApiResponse(code = 404, message = "No such Country or team or league"),
+            @ApiResponse(code = 503, message = OPERATION_TIMED_OUT)
     })
-    public Response getPosition(
+    public void getPosition(
     		@QueryParam("country_name") String countryName,
     		@QueryParam("league_name") String leagueName,
-    		@QueryParam("team_name") String teamName
+    		@QueryParam("team_name") String teamName,
+    		@Suspended AsyncResponse asyncResponse
    		) {
+    	asyncResponse.setTimeout(3000, TimeUnit.MILLISECONDS);
+    	asyncResponse.setTimeoutHandler(ar -> ar.resume(
+    			Response.status(Response.Status.SERVICE_UNAVAILABLE)
+    			.entity(OPERATION_TIMED_OUT)
+    			.build()));
     	String key = new StringBuilder(Optional.ofNullable(countryName).orElse(UNKNOWN)).append("|")
     			.append(Optional.ofNullable(leagueName).orElse(UNKNOWN)).append("|")
     			.append(Optional.ofNullable(teamName).orElse(UNKNOWN)).toString();
@@ -56,7 +69,7 @@ public class PositionResource {
     							? Response.status(Response.Status.OK).entity(position.get()).build()
     							: Response.status(Response.Status.NOT_FOUND).entity("Invalid country or league or team").build();
     	logger.info("Response for the position query with key \"{}\" is {}", key, response.getEntity());
-        return response;
+    	asyncResponse.resume(response);
     }
 
 	
