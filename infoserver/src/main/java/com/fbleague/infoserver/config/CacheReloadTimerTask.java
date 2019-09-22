@@ -21,9 +21,7 @@ public class CacheReloadTimerTask extends TimerTask {
 
 	@Override
 	public void run() {
-		logger.info("Cache reloading started..");
 		cacheManager.loadOrReloadCache();
-		logger.info("Cache reloading ended");
 	}
 
 }

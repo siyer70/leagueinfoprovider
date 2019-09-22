@@ -1,13 +1,9 @@
 package com.fbleague.infoserver.loaders;
 
-import static com.fbleague.infoserver.loaders.LoaderConstants.COUNTRIES_KEY;
-import static com.fbleague.infoserver.loaders.LoaderConstants.LEAGUES_KEY;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
-import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
@@ -19,38 +15,50 @@ import org.springframework.stereotype.Component;
 
 import com.fbleague.infoserver.model.Country;
 import com.fbleague.infoserver.model.League;
+import com.google.common.collect.Lists;
 
 @Component
 @Profile("!test")
-public class LeagueLoader implements Loader {
+public class LeagueLoader {
 	Logger logger = LoggerFactory.getLogger(LeagueLoader.class);
 
-	@Override
-	public void load(Map<String, Map<String, ? extends Object>> cache, WebTarget target) {
-		logger.info("Loading Leagues");
-		Map<String, League> leagueMap = new HashMap<>();
-		cache.put(LEAGUES_KEY, leagueMap);
-
-		Map<String, Country> countryMap = (Map<String, Country>) cache.get(COUNTRIES_KEY);
-
-		countryMap.values().forEach(country -> {
-			logger.info("Sending request to information source for country: {}", country.getCountryName());
-			try {
-		        final List<League> leagues = target.queryParam("action", "get_leagues")
-		        		.queryParam("country_id", country.getCountryId())
-		        		.request()
-		                .accept(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<List<League>>() {});
-				logger.info("Request succeeded -> leagues loaded for country {} : {}", country.getCountryName(), leagues.size());
-
-				leagues.forEach(league -> 
-					leagueMap.put(league.getLeagueId(), league)
-				);
-				logger.info("Loaded leagues for country: {}", country.getCountryName());
-			} catch (ProcessingException ex) {
-				logger.error("An error occurred while loading leagues", ex);
-			}
+	public CompletableFuture<List<League>> load(WebTarget target, List<Country> countryList) {
+		List<CompletableFuture<List<League>>> leagueListFutures = Lists.newArrayList();
+		
+		countryList.forEach(country -> {
+			leagueListFutures.add(load(target, country));
 		});
-
+		
+		CompletableFuture<Void> allFutures = CompletableFuture.allOf(
+				leagueListFutures.toArray(new CompletableFuture[leagueListFutures.size()]));
+		
+		CompletableFuture<List<League>> allLeagues = allFutures.thenApply(v -> {
+			return leagueListFutures.stream()
+			.map(future -> future.join())
+			.flatMap(List::stream)
+			.collect(Collectors.toList());
+		});
+		
+		return allLeagues;
 	}
+	
+	private CompletableFuture<List<League>> load(WebTarget target, Country country) {
+		return CompletableFuture.supplyAsync(() -> {
+			logger.info("Loading Leagues for country: {}", country.getCountryName());
+			List<League> leagues = target.queryParam("action", "get_leagues")
+	        		.queryParam("country_id", country.getCountryId())
+	        		.request()
+	                .accept(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<List<League>>() {});
+			logger.info("Request succeeded -> leagues loaded for country {} : {}", country.getCountryName(), leagues.size());
+			return leagues;			
+		}).handle((res, ex) -> {
+			if(ex != null) {
+				logger.error("An error occurred while loading leagues", ex);
+				return Lists.newArrayList();
+			}
+			return res;
+		});
+	}
+	
 
 }

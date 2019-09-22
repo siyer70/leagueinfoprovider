@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.client.Client;
@@ -124,12 +125,28 @@ public class CacheManagerImpl implements CacheManager {
 	}
 
 	public void loadOrReloadCache() {
-		waitForReadersToRead();
-		isWriting.compareAndSet(false, true);
-		loadCountries();
-		loadLeagues();
-		loadPositions();
-		isWriting.compareAndSet(true, false);
+		logger.info("Cache reloading started..");
+		countryLoader.load(target).thenAccept(countryList -> {
+			leagueLoader.load(target, countryList).thenAccept(leagueList -> {
+				positionLoader.load(target, leagueList).thenAccept(positionList -> {
+
+					Map<String, Position> positionMap = positionList.stream()
+							.collect(Collectors.toMap(
+									positionLoader::getPositionKey, position -> position));
+					
+					waitForReadersToRead();
+
+					// data from source received and no one is reading
+					// right time to update the position map now
+					isWriting.compareAndSet(false, true);
+					cache.put(POSITIONS_KEY, positionMap);
+					isWriting.compareAndSet(true, false);
+
+					logger.info("Cache reloading ended");
+					
+				});
+			});
+		});
 	}
 
 	private void waitForReadersToRead() {
@@ -144,19 +161,7 @@ public class CacheManagerImpl implements CacheManager {
 			}
 		}
 	}
-
-	private void loadCountries() {
-		countryLoader.load(cache, target);
-	}
-
-	private void loadLeagues() {
-		leagueLoader.load(cache, target);
-	}
-
-	private void loadPositions() {
-		positionLoader.load(cache, target);
-	}
-
+	
 	private URI getBaseURI() {
 		String baseURL = configManager.getProperty("baseURL");
 		logger.info("BaseURL is: {}", baseURL);

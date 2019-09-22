@@ -1,6 +1,5 @@
 package com.fbleague.infoserver.loaders;
 
-import static com.fbleague.infoserver.loaders.LoaderConstants.COUNTRIES_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -8,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Invocation;
@@ -51,37 +51,32 @@ public class CountryLoaderTest {
 	}
 	
 	@Test
-	public void shouldBeAbleToLoadCountriesInCache() {
+	public void shouldBeAbleToRetrieveCountriesFromTheGivenSource() throws InterruptedException, ExecutionException {
 		// Generate test data and set expectations
-		String key = "India";
-		Country countryIndia = new TestUtils().buildCountryInstance("IN", key);
-		List<Country> countries = Lists.<Country>newArrayList(countryIndia);
-		when(response.readEntity(new GenericType<List<Country>>() {})).thenReturn(countries);
+		Country countryIndia = new TestUtils().buildCountryInstance("IN", "India");
+		List<Country> expectedCountries = Lists.<Country>newArrayList(countryIndia);
+		when(response.readEntity(new GenericType<List<Country>>() {})).thenReturn(expectedCountries);
 
 		// execute the class under test
 		CountryLoader classUnderTest = new CountryLoader();
-		classUnderTest.load(cache, target);
-		Map<String, ? extends Object> countryMap = cache.get(COUNTRIES_KEY);
+		List<Country> actualCountries = classUnderTest.load(target).get();
 		
-		// assert the results - ensure that country loader loaded the test data in cache
-		assertThat(countryMap.size()).isEqualTo(1);
-		assertThat(countryMap.containsKey(key)).isEqualTo(true);
-		assertThat(((Country) countryMap.get(key)).toString()).isEqualTo(countryIndia.toString());
-		
+		// assert the results - ensure that country loader returned the expected data
+		assertThat(actualCountries.size()).isEqualTo(1);
+		assertThat(((Country) actualCountries.get(0)).toString()).isEqualTo(countryIndia.toString());
 	}
 	
 	@Test
-	public void shouldGracefullyHandleExceptions() {
+	public void shouldGracefullyHandleExceptionsWhileRetrievingDataFromGivenSource() 
+			throws InterruptedException, ExecutionException {
 		when(response.readEntity(new GenericType<List<Country>>() {}))
 			.thenThrow(new ProcessingException("Some exception occurred"));
 
 		CountryLoader classUnderTest = new CountryLoader();
-		classUnderTest.load(cache, target);
+		List<Country> actualCountries = classUnderTest.load(target).get();
 		
-		// ensure cache does not have any object loaded
-		Map<String, ? extends Object> countryMap = cache.get(COUNTRIES_KEY);
-		assertThat(countryMap.size()).isEqualTo(0);
+		// should gracefully return an empty list
+		assertThat(actualCountries.size()).isEqualTo(0);
 	}
 	
-
 }

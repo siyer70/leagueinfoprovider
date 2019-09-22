@@ -1,7 +1,5 @@
 package com.fbleague.infoserver.loaders;
 
-import static com.fbleague.infoserver.loaders.LoaderConstants.COUNTRIES_KEY;
-import static com.fbleague.infoserver.loaders.LoaderConstants.LEAGUES_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -9,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Invocation;
@@ -23,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.fbleague.infoserver.model.Country;
 import com.fbleague.infoserver.model.League;
 import com.fbleague.infoserver.utils.TestUtils;
 import com.google.common.collect.Lists;
@@ -42,16 +42,15 @@ public class LeagueLoaderTest {
 	Response response;
 	
 	// Test utility for test data generation
-	TestUtils testUtils = TestUtils.getInstance();
+	private TestUtils testUtils = TestUtils.getInstance();
+	
+	private Country countryIN = testUtils.buildCountryInstance("IN", "India");
+	private List<Country> countryList = Lists.newArrayList(countryIN);
 	
 	@Before
 	public void setup() {
 		cache = new HashMap<>();
 		
-		// Country Map is required by League Loader (the class under test)
-		cache.put(COUNTRIES_KEY, testUtils.buildCountryMap("IN", "India"));
-
-
 		when(target.queryParam(any(), any()))
 			.thenReturn(target);
 		when(target.request()).thenReturn(builder);
@@ -60,37 +59,36 @@ public class LeagueLoaderTest {
 	}
 	
 	@Test
-	public void shouldBeAbleToLoadLeaguesInCache() {
+	public void shouldBeAbleToRetrieveLeaguesFromTheGivenSource() 
+			throws InterruptedException, ExecutionException {
 		// build test data and set expectations
-		String leagueKey = "lid";
-		League league = testUtils.buildLeagueInstance("IN", "India", leagueKey, "Ligue 2");
+		League league = testUtils.buildLeagueInstance("IN", "India", "lid", "Ligue 2");
 		when(response.readEntity(new GenericType<List<League>>() {})).thenReturn(
 				Lists.<League>newArrayList(league)
 		);
 
 		// execute the test 
 		LeagueLoader classUnderTest = new LeagueLoader();
-		classUnderTest.load(cache, target);
-		Map<String, ? extends Object> leagueMap = cache.get(LEAGUES_KEY);
+		List<League> actualLeagues = classUnderTest.load(target, countryList).get();
 		
-		//assert the results - ensure loader has loaded the test data in cache
-		assertThat(leagueMap.size()).isEqualTo(1);
-		assertThat(leagueMap.containsKey(leagueKey)).isEqualTo(true);
-		assertThat(((League) leagueMap.get(leagueKey)).toString()).isEqualTo(league.toString());
+		//assert the results - ensure loader has returned the expected data from source
+		assertThat(actualLeagues.size()).isEqualTo(1);
+		assertThat(((League) actualLeagues.get(0)).toString()).isEqualTo(league.toString());
 	}
 	
 	@Test
-	public void shouldGracefullyHandleExceptions() {
+	public void shouldGracefullyHandleExceptionsFromSource() 
+			throws InterruptedException, ExecutionException {
+		// build test data and set expectations
 		when(response.readEntity(new GenericType<List<League>>() {}))
 			.thenThrow(new ProcessingException("Some error occurred"));
 		
 		// execute the test 
 		LeagueLoader classUnderTest = new LeagueLoader();
-		classUnderTest.load(cache, target);
-		Map<String, ? extends Object> leagueMap = cache.get(LEAGUES_KEY);
+		List<League> actualLeagues = classUnderTest.load(target, countryList).get();
 		
 		//assert the results - ensure loader hasn't loaded any object
-		assertThat(leagueMap.size()).isEqualTo(0);
+		assertThat(actualLeagues.size()).isEqualTo(0);
 	}
-
+	
 }

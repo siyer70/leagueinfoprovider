@@ -1,8 +1,5 @@
 package com.fbleague.infoserver.loaders;
 
-import static com.fbleague.infoserver.loaders.LoaderConstants.COUNTRIES_KEY;
-import static com.fbleague.infoserver.loaders.LoaderConstants.LEAGUES_KEY;
-import static com.fbleague.infoserver.loaders.LoaderConstants.POSITIONS_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -10,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Invocation;
@@ -24,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.fbleague.infoserver.model.League;
 import com.fbleague.infoserver.model.Position;
 import com.fbleague.infoserver.utils.TestUtils;
 import com.google.common.collect.Lists;
@@ -43,15 +42,14 @@ public class PositionLoaderTest {
 	Response response;
 	
 	// Test utility for test data generation
-	TestUtils testUtils = TestUtils.getInstance();
+	private TestUtils testUtils = TestUtils.getInstance();
 
+	private League league = testUtils.buildLeagueInstance("IN", "India", "LID", "Ligue 2");
+	private List<League> leagueList = Lists.newArrayList(league);
+	
 	@Before
 	public void setup() {
 		cache = new HashMap<>();
-		
-		// Country and League Maps are  dependencies of Position Loader (the class under test)
-		cache.put(COUNTRIES_KEY, testUtils.buildCountryMap("IN", "India"));
-		cache.put(LEAGUES_KEY, testUtils.buildLeagueMap("IN", "India", "LID", "Ligue 2"));
 		
 		when(target.queryParam(any(), any()))
 			.thenReturn(target);
@@ -61,7 +59,8 @@ public class PositionLoaderTest {
 	}
 	
 	@Test
-	public void shouldBeAbleToLoadPositionsInCache() {
+	public void shouldBeAbleToRetrievePositionsFromTheGivenSource() 
+			throws InterruptedException, ExecutionException {
 		// build test data and set expectations
 		Position position = testUtils.buildPositionInstance("India", "Ligue 2", "Some team", "1");
 		when(response.readEntity(new GenericType<List<Position>>() {})).thenReturn(
@@ -69,32 +68,30 @@ public class PositionLoaderTest {
 
 		// execute test
 		PositionLoader classUnderTest = new PositionLoader();
-		String positionKey = classUnderTest.getPositionKey(position);
-		classUnderTest.load(cache, target);
+		List<Position> actualPositions = classUnderTest.load(target, leagueList).get();
 		
-		// assert results - ensure that positions are loaded in cache
-		Map<String, ? extends Object> positionMap = cache.get(POSITIONS_KEY);
-		assertThat(positionMap.size()).isEqualTo(1);
-		assertThat(positionMap.containsKey(positionKey)).isEqualTo(true);
+		// assert results - ensure that expected positions are returned
+		assertThat(actualPositions.size()).isEqualTo(1);
 
 		// used string comparison instead of hashcode-equals to please sonar robotic mind
 		// to address coverage and cyclomatic complexity
-		assertThat(((Position) positionMap.get(positionKey)).toString()).isEqualTo(position.toString());		
+		assertThat(((Position) actualPositions.get(0)).toString()).isEqualTo(position.toString());		
 	}
 	
+
 	@Test
-	public void shouldGracefullyHandleExceptions() {
+	public void shouldGracefullyHandleExceptionsFromSource() 
+			throws InterruptedException, ExecutionException {
+		// build test data and set expectations
 		when(response.readEntity(new GenericType<List<Position>>() {})).thenThrow(
 				new ProcessingException("Some error occurrred"));
 
 		// execute test
 		PositionLoader classUnderTest = new PositionLoader();
-		classUnderTest.load(cache, target);
+		List<Position> actualPositions = classUnderTest.load(target, leagueList).get();
 		
-		// assert results - ensure that positions aren't loaded in cache
-		Map<String, ? extends Object> positionMap = cache.get(POSITIONS_KEY);
-		assertThat(positionMap.size()).isEqualTo(0);
+		// assert results - ensure that no positions are returned
+		assertThat(actualPositions.size()).isEqualTo(0);
 	}
 	
-
 }
